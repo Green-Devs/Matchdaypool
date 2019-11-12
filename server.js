@@ -6,6 +6,7 @@ let jsonParser = bp.json();
 let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 let {PetList} = require('./model');
+let {DATABASE_URL, PORT} = require('./config');
 
 let app = express();
 
@@ -123,7 +124,7 @@ function closeServer() {
         });
 }
 
-runServer(8080, "mongodb://localhost/studentsDB")
+runServer(PORT, DATABASE_URL)
     .catch(err => {
         console.log(err);
     });
