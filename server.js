@@ -5,7 +5,7 @@ let jsonParser = bp.json();
 
 let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-let {PetList} = require('./model');
+let {PoolList, MatchdayList, TeamList, UserList, VoteList, ParticipantsList} = require('./model');
 let {DATABASE_URL, PORT} = require('./config');
 
 let app = express();
@@ -16,6 +16,20 @@ app.use(morgan('dev'));
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     next();
+});
+
+app.get("/api/pools", ( req, res, next ) => {
+    PoolList.get()
+        .then( pools => {
+            return res.status( 200 ).json( pools );
+        })
+        .catch( error => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : "Something went wrong with the DB. Try again later."
+            })
+        });
 });
 
 // Example of methods ------------------------------------------------------------------------

@@ -1,5 +1,9 @@
+function createPool() {
+    
+}
+
 function init() {
-    let url = "/api/pets"
+    let url = "/api/pools"
     let settings = {
         method: "GET"
     }
@@ -15,14 +19,14 @@ function init() {
             console.log(responseJSON);
 
             for (let i = 0; i < responseJSON.length; i++) {
-                $(".listOfPets").append(`
+                $(".listOfPools").append(`
                 <li class="pet">
                     ${responseJSON[i].name} (${responseJSON[i].typeOfPet})
                 </li>
                 `);
             }
         })
-        .catch(err=>{
+        .catch(err => {
             console.log(err);
         });
     

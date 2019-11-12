@@ -1,6 +1,21 @@
 let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
+// User model ---------------------------------------------------------------------------------------------------------------------
+
+let userSchema = mongoose.Schema({
+    name: {type: String, require: true},
+    lastname: {type: String, require: true},
+    dob: {type: Date, require: true},
+    email: {type: String, require: true},
+    password: {type: String, require: true},
+    owner: {type: mongoose.Schema.Types.ObjectId, ref: "User"}
+});
+
+let User = mongoose.model('User', userSchema);
+
+let UserList = {};
+
 // Pool model ---------------------------------------------------------------------------------------------------------------------
 
 let poolSchema = mongoose.Schema ({
@@ -13,30 +28,37 @@ let poolSchema = mongoose.Schema ({
 let Pool = mongoose.model('Pool', poolSchema);
 
 let PoolList = {
-    get : function(){
-        if (idParam != null) {
-            return Pet.findOne({id:idParam})
-                .then( pets => {
-                    return pets;
-                })
-                .catch( error => {
-                    throw Error( error );
-                });
-        } else {
-            return Pet.find()
-                .then( pets => {
-                    return pets;
-                })
-                .catch( error => {
-                    throw Error( error );
-                });
-        }
-        
+    get: function(){
+        return Pool.find()
+        .then( pools => {
+            return pools;
+        })
+        .catch( error => {
+            throw Error( error );
+        });
     },
-    post: function(newPet) {
-        return Pet.create(newPet)
-            .then(pet => {
-                return pet;
+    post: function(newPool) {
+        return Pool.create(newPool)
+            .then(pool => {
+                return pool;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    update: function(pool) {
+        return Pool.findOneAndUpdate({id:id}, {$set:{pool}},{new:time})
+            .then(pool => {
+                return pool;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    delete: function(poolID) {
+        return Pool.findByIdAndDelete({id:poolID})
+            .then(pool => {
+                return pool;
             })
             .catch(err => {
                 throw Error(err);
@@ -68,20 +90,6 @@ let matchdaySchema = mongoose.Schema ({
 let Matchday = mongoose.model('Matchday', matchdaySchema);
 
 let MatchdayList = {};
-
-// User model ---------------------------------------------------------------------------------------------------------------------
-
-let userSchema = mongoose.Schema({
-    name: {type: String, require: true},
-    lastname: {type: String, require: true},
-    dob: {type: Date, require: true},
-    email: {type: String, require: true},
-    password: {type: String, require: true},
-});
-
-let User = mongoose.model('User', userSchema);
-
-let UserList = {};
 
 // Participants model ---------------------------------------------------------------------------------------------------------------------
 
