@@ -15,14 +15,25 @@ let userSchema = mongoose.Schema({
 let User = mongoose.model('User', userSchema);
 
 let UserList = {
-    get: function(){
-        return User.find()
-        .then( users => {
-            return users;
-        })
-        .catch( error => {
-            throw Error( error );
-        });
+    get: function(user){
+        if (user) {
+            return User.find({username: user.username})
+                .then( users => {
+                    return users;
+                })
+                .catch( error => {
+                    throw Error( error );
+                });
+        } else {
+            return User.find()
+                .then( users => {
+                    return users;
+                })
+                .catch( error => {
+                    throw Error( error );
+                });
+        }
+        
     },
     post: function(newUser) {
         return User.create(newUser)
