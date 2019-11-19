@@ -44,7 +44,7 @@ app.get("/api/pools",  jsonParser,( req, res, next ) => {
 });
 
 app.post("/api/postUser", jsonParser, ( req, res, next ) => {
-    let {name, lastname, username, email, password} = req.body;
+    let {name, lastname, username, dob, email, password} = req.body;
 
     if (!name || !lastname || !username || !email || !password) {
         res.statusMessage = "Missing field in the body";
@@ -58,6 +58,7 @@ app.post("/api/postUser", jsonParser, ( req, res, next ) => {
         name, 
         lastname, 
         username, 
+        dob,
         email, 
         password
     };
@@ -65,6 +66,20 @@ app.post("/api/postUser", jsonParser, ( req, res, next ) => {
     UserList.post(newUser)
         .then(user => {
             return res.status(201).json(user);
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong with the DB";
+            return res.status(500).json({
+                message: "Something went wrong with the DB",
+                status: 500
+            })
+        });
+});
+
+app.get("/api/Users", jsonParser, (req, res, next) => {
+    UserList.get()
+        .then(users => {
+            return res.status(201).json(users);
         })
         .catch(err => {
             res.statusMessage = "Something went wrong with the DB";
