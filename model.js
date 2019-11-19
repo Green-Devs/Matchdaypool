@@ -122,6 +122,18 @@ let Participants = mongoose.model('Participants', participantsSchema);
 
 let ParticipantsList = {};
 
+// Invites model ---------------------------------------------------------------------------------------------------------------------
+
+let invitesSchema = mongoose.Schema({
+    invitee: {type: mongoose.Schema.Types.ObjectId, ref: "User", require: true},
+    pool: {type: mongoose.Schema.Types.ObjectId, ref: "Pool", require: true},
+    status: {type: "String", require: true}
+});
+
+let Invites = mongoose.model('Invites', participantsSchema);
+
+let InvitesList = {};
+
 // Votes model ---------------------------------------------------------------------------------------------------------------------
 
 let voteSchema = mongoose.Schema({
@@ -186,4 +198,4 @@ let VoteList = {};
 //     }
 // }
 
-module.exports = {PoolList, MatchdayList, TeamList, UserList, VoteList, ParticipantsList};
+module.exports = {PoolList, MatchdayList, TeamList, UserList, VoteList, ParticipantsList, InvitesList};
