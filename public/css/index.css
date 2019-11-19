@@ -3,6 +3,10 @@
     height: 100%;
 }
 
+html > body {
+    background-color: #13326E;
+}
+
 @media (min-width: 768px) {
     .banner {
         background-image: url("https://image.freepik.com/free-vector/seamless-pattern-sport-objects_1335-614.jpg");

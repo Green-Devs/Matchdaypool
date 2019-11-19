@@ -1,0 +1,32 @@
+@media (min-width: 768px) {
+    .banner {
+        background-image: url("https://image.freepik.com/free-vector/seamless-pattern-sport-objects_1335-614.jpg");
+        height: 75px;
+    }
+}
+
+html > body {
+    background-color: #13326E;
+}
+
+.loginForm {
+    padding: 15px;
+    margin: 20px;
+    background-color: rgb(248, 248, 148);
+    border: solid rgb(0, 95, 124) 2px;
+}
+
+#noAccount {
+    margin-top: 25px;
+    display: flex;
+}
+
+#accountLetters {
+    margin-right: 10px;
+}
+
+#test {
+    border: solid 1px #ced4da;
+    border-radius: 5px;
+    border-color: #ced4da;
+}
