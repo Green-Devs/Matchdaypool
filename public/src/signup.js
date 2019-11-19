@@ -22,7 +22,7 @@ function signup() {
             contentType: "application/json", // type of sent data in the request
             success: function(responseJSON){
                 console.log("success", responseJSON);
-                Cookies.set("userID", responseJSON._id, {expires: 10});
+                localStorage.setItem("userID", responseJSON._id);
                 window.location.href = './publicpools.html';
             },
             error: function(err){
