@@ -2,10 +2,11 @@ let express = require('express');
 let morgan = require('morgan');
 let bp = require('body-parser');
 let jsonParser = bp.json();
+let bcrypt = require('bcryptjs');
 
 let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-let {PoolList, MatchdayList, TeamList, UserList, VoteList, ParticipantsList} = require('./model');
+let {PoolList, MatchdayList, TeamList, UserList, VoteList, ParticipantsList, InvitesList} = require('./model');
 let {DATABASE_URL, PORT} = require('./config');
 
 let app = express();
@@ -32,7 +33,7 @@ app.get("/api/pools", ( req, res, next ) => {
         });
 });
 
-app.post("/api/postUser", ( req, res, next ) => {
+app.post("/api/postUser", jsonParser, ( req, res, next ) => {
     let {name, lastname, username, email, password} = req.body;
 
     if (!name || !lastname || !username || !email || !password) {
@@ -63,6 +64,41 @@ app.post("/api/postUser", ( req, res, next ) => {
             })
         });
 });
+
+// Examples of bcrypt ---------------------------------------------------------------------------------------------------
+
+// app.post("/user/login", jsonParser, ( req, res, next ) => {
+//     let {username, password} = req.body;
+
+//     UserList.get({username})
+//         .then( user => {
+//             if (user) {
+//                 return bcrypt.hash(password, 10);
+//             }
+//         })
+//         .then( isValid => {
+//             if (isValid) {
+//                 // success
+//             }
+//         })
+
+
+// });
+
+// app.post("/user/register", jsonParser, ( req, res, next ) => {
+
+//     let {username, password} = req.body;
+
+//     UserList.get(username)
+//         .then(user => {
+//             if (!user) {
+//                 return bcrypt.hash(password, 10);
+//             }
+//         })
+//         .then(hashPass => {
+//             UserList.register({username, password: hashPass});
+//         })
+// });
 
 // Example of methods ------------------------------------------------------------------------
 
