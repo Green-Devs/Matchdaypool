@@ -19,10 +19,20 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get("/api/pools", ( req, res, next ) => {
+app.get("/api/pools", jsonParser, ( req, res, next ) => {
     PoolList.get()
         .then( pools => {
-            return res.status( 200 ).json( pools );
+            if (req.body.id) {
+                let userPools = [];
+                for (let i = 0; i < pools.length; i++) {
+                    if (pools[i].owner = req.body.id) {
+                        userPools.push(pools[i]);
+                    }
+                }
+                return res.status ( 200 ).json( userPools );
+            } else {
+                return res.status( 200 ).json( pools );
+            }
         })
         .catch( error => {
             res.statusMessage = "Something went wrong with the DB. Try again later.";

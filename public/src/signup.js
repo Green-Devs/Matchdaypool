@@ -1,14 +1,17 @@
-function createUser() {
-    $("#createAcc").on("click", (event) => {
+function signup() {
+    $(".btn.btn-primary").on("click", (event) => {
         event.preventDefault();
+
+        console.log("signup");
 
         let url = "/api/postUser";
         let newUser = {
-            name, 
-            lastname, 
-            username, 
-            email, 
-            password
+            name: $("#name").val(), 
+            lastname: $("#lastname").val(), 
+            username: $("#username").val(), 
+            email: $("#email").val(), 
+            password: $("#password").val(),
+            dob: $("#dob").val()
         }
         
         let settings = {
@@ -19,6 +22,8 @@ function createUser() {
             contentType: "application/json", // type of sent data in the request
             success: function(responseJSON){
                 console.log("success", responseJSON);
+                Cookie.set("userID", responseJSON._id, {expires: 10});
+                window.location.href = './publicpools.html';
             },
             error: function(err){
                 console.log("err", err);
@@ -27,8 +32,7 @@ function createUser() {
 
         $.ajax(settings);
 
-        window.location.href = './../html/pools.html';
-    })
+    });
 }
 
 function examplesForPUTandPOSTMethods() {
@@ -56,3 +60,5 @@ function examplesForPUTandPOSTMethods() {
         dataType: "JSON"
     });
 }
+
+signup();
