@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Matchday Pool - Create pool</title>
+    <link rel="shortcut icon" type="image/png" href="https://i.imgur.com/U7a9HzK.png" />
+    <link href="./css/login.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+    <!-- Banner -->
+    <div class="banner"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        
+    </nav>
+
+    <!-- Main Content -->
+    <div class="loginForm">
+        <form>
+            <div class="form-group">
+                <label for="name"><b>Name</b></label>
+                <input type="text" class="form-control" id="name" aria-describedby="emailHelp"
+                    placeholder="Name of pool">
+            </div>
+            <div class="form-group">
+                <label for="desc"><b>Description</b></label>
+                <textarea type="text" class="form-control" id="desc" aria-describedby="emailHelp"
+                    placeholder="Type in a description"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="cost"><b>Cost</b></label>
+                <input type="text" class="form-control" id="cost" aria-describedby="emailHelp"
+                    placeholder="Username">
+            </div>
+            <div class="form-group">
+                <label for="private"><b>Private</b></label>
+                <input type="checkbox"  id="private">
+                <small id="emailHelp" class="form-text text-muted">Check if you don't want your pool to be shared publicly in the page.</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Create pool</button>
+        </form>
+    </div>
+
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js.map"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="./navbar.js"></script>
+    <script src="./src/index.js"></script>
+    <script src="./src/signup.js"></script>
+    
+</body>
+
+</html>

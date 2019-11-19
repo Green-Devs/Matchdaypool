@@ -23,7 +23,7 @@ function signup() {
             success: function(responseJSON){
                 console.log("success", responseJSON);
                 localStorage.setItem("userID", responseJSON._id);
-                window.location.href = './publicpools.html';
+                window.location.href = './publicPools.html';
             },
             error: function(err){
                 console.log("err", err);

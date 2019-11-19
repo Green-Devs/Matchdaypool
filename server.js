@@ -19,7 +19,9 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get("/api/pools",  jsonParser,( req, res, next ) => {
+// GET Methods ----------------------------------------------------------------------------------------------------
+
+app.get("/api/getPools", jsonParser, ( req, res, next ) => {
     PoolList.get()
         .then( pools => {
             if (req.body.id) {
@@ -42,6 +44,12 @@ app.get("/api/pools",  jsonParser,( req, res, next ) => {
             })
         });
 });
+
+app.get("/api/getUser/:id", jsonParser, (req, res, next) => {
+    
+})
+
+// POST Methods ----------------------------------------------------------------------------------------------------
 
 app.post("/api/postUser", jsonParser, ( req, res, next ) => {
     let {name, lastname, username, dob, email, password} = req.body;
@@ -89,6 +97,27 @@ app.get("/api/Users", jsonParser, (req, res, next) => {
             })
         });
 });
+
+app.post("api/login", jsonParser, (req, res, next) => {
+    let {username, password} = req.body;
+
+    let user = {username, password};
+	UserList.login(user)
+		.then(goodUser => {
+			return res.status( 202 ).json( goodUser );
+		})
+		.catch( error => {
+			res.statusMessage = "Something went wrong with the DB. Try again later.";
+			return res.status( 500 ).json({
+				status : 500,
+				message : "Something went wrong with the DB. Try again later."
+			})
+		});
+});
+
+// PUT Methods ----------------------------------------------------------------------------------------------------
+
+// DELETE Methods ----------------------------------------------------------------------------------------------------
 
 // Examples of bcrypt ---------------------------------------------------------------------------------------------------
 
