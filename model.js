@@ -6,15 +6,34 @@ mongoose.Promise = global.Promise;
 let userSchema = mongoose.Schema({
     name: {type: String, require: true},
     lastname: {type: String, require: true},
-    dob: {type: Date, require: true},
+    username: {type: String, require: true},
     email: {type: String, require: true},
     password: {type: String, require: true},
-    owner: {type: mongoose.Schema.Types.ObjectId, ref: "User"}
+    
 });
 
 let User = mongoose.model('User', userSchema);
 
-let UserList = {};
+let UserList = {
+    get: function(){
+        return User.find()
+        .then( users => {
+            return users;
+        })
+        .catch( error => {
+            throw Error( error );
+        });
+    },
+    post: function(newUser) {
+        return User.create(newUser)
+            .then(user => {
+                return user;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+};
 
 // Pool model ---------------------------------------------------------------------------------------------------------------------
 
@@ -23,6 +42,7 @@ let poolSchema = mongoose.Schema ({
     desc: {type: String, require: true},
     cost: {type: Number, require: true},
     private: {type: Boolean, require: true},
+    owner: {type: mongoose.Schema.Types.ObjectId, ref: "User"}
 });
 
 let Pool = mongoose.model('Pool', poolSchema);

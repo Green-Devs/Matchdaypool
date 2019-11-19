@@ -32,6 +32,38 @@ app.get("/api/pools", ( req, res, next ) => {
         });
 });
 
+app.post("/api/postUser", ( req, res, next ) => {
+    let {name, lastname, username, email, password} = req.body;
+
+    if (!name || !lastname || !username || !email || !password) {
+        res.statusMessage = "Missing field in the body";
+        return res.status(406).json( {
+            message: "Missing field in the body",
+            status: 406
+        })
+    }
+
+    let newUser = {
+        name, 
+        lastname, 
+        username, 
+        email, 
+        password
+    };
+
+    UserList.post(newUser)
+        .then(user => {
+            return res.status(201).json(user);
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong with the DB";
+            return res.status(500).json({
+                message: "Something went wrong with the DB",
+                status: 500
+            })
+        });
+});
+
 // Example of methods ------------------------------------------------------------------------
 
 // app.get( "/api/pets", ( req, res, next ) => {
