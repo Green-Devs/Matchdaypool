@@ -1,6 +1,7 @@
 let express = require('express');
 let morgan = require('morgan');
 let bp = require('body-parser');
+let bcrypt = require('bcryptjs');
 let jsonParser = bp.json();
 let bcrypt = require('bcryptjs');
 
@@ -19,7 +20,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get("/api/pools", jsonParser, ( req, res, next ) => {
+app.get("/api/pools",  jsonParser,( req, res, next ) => {
     PoolList.get()
         .then( pools => {
             if (req.body.id) {
@@ -108,6 +109,32 @@ app.post("/api/postUser", jsonParser, ( req, res, next ) => {
 //         .then(hashPass => {
 //             UserList.register({username, password: hashPass});
 //         })
+// });
+
+// app.post("/user/register", jsonParser, (req, res, next) => {
+//     let { username, password } = req.body;
+//     students.get({ username })
+//         .then(user => {
+//             if (!user) {
+//                 return bcrypt.hash(password, 10);
+//             }
+//         })
+//         .then(hashPass => users.register({ username, password: hashPass }))
+//     });
+
+// app.post("/user/login", jsonParser, (req, res, next) => {
+//     let { username, password } = req.body;
+//     user.get({ username })
+//         .then(user => {
+//             if (user) {
+//                 return bcrypt.compare(password, user.password)
+//             }
+//         })
+//         .then(isValid => {
+//             if (isValid) {
+//                 //success
+//             }
+// 	    })
 // });
 
 // Example of methods ------------------------------------------------------------------------
