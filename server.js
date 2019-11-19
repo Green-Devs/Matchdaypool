@@ -19,7 +19,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get("/api/pools",  jsonParser,( req, res, next ) => {
+app.get("/api/pools", jsonParser, ( req, res, next ) => {
     PoolList.get()
         .then( pools => {
             if (req.body.id) {

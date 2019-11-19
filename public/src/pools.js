@@ -1,33 +1,26 @@
-function init() {
-    let url = "/api/pools"
+function getPools() {
+    let url = "/api/pools";
     let settings = {
-        method: "GET"
-    }
-    fetch(url, settings)
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            }
-
-            throw new Error (response.statusText);
-        })
-        .then(responseJSON => {
-            console.log(responseJSON);
-
+        url: url ,
+        method: "GET",
+        dataType: "JSON", // returned type of the response
+        success: function(responseJSON){
+            console.log("success", responseJSON);
             for (let i = 0; i < responseJSON.length; i++) {
                 $(".listOfPools").append(`
-                <li class="pet">
+                <li class="pool">
                     ${responseJSON[i].name} (${responseJSON[i].typeOfPet})
                 </li>
                 `);
             }
-        })
-        .catch(err => {
-            console.log(err);
-        });
+        },
+        error: function(err){
+            console.log("err", err);
+        }
+    };
     
-    // hello
+    $.ajax(settings);
 
 }
 
-init();
+getPools();
