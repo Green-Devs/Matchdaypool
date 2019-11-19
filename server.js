@@ -3,7 +3,6 @@ let morgan = require('morgan');
 let bp = require('body-parser');
 let bcrypt = require('bcryptjs');
 let jsonParser = bp.json();
-let bcrypt = require('bcryptjs');
 
 let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
