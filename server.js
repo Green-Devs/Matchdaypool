@@ -1,6 +1,7 @@
 let express = require('express');
 let morgan = require('morgan');
 let bp = require('body-parser');
+let bcrypt = require('bcryptjs');
 let jsonParser = bp.json();
 
 let mongoose = require('mongoose');
@@ -17,6 +18,32 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     next();
 });
+
+app.post("/user/register", jsonParser, (req, res, next) => {
+    let { username, password } = req.body;
+    students.get({ username })
+        .then(user => {
+            if (!user) {
+                return bcrypt.hash(password, 10);
+            }
+        })
+        .then(hashPass => users.register({ username, password: hashPass }))
+    });
+
+app.post("/user/login", jsonParser, (req, res, next) => {
+    let { username, password } = req.body;
+    user.get({ username })
+        .then(user => {
+            if (user) {
+                return bcrypt.compare(password, user.password)
+            }
+        })
+        .then(isValid => {
+            if (isValid)
+			//success
+	})
+});
+
 
 app.get("/api/pools", ( req, res, next ) => {
     PoolList.get()
