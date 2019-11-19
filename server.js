@@ -40,9 +40,10 @@ app.post("/user/login", jsonParser, (req, res, next) => {
             }
         })
         .then(isValid => {
-            if (isValid)
-			//success
-	})
+            if (isValid) {
+                //success
+            }
+	    })
 });
 
 
