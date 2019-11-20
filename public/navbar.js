@@ -22,7 +22,7 @@ function createNavBar() {
                 <a class="nav-link" href="publicPools.html">My Pools</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="publicPools.html">Create a pool</a>
+                <a class="nav-link" href="createPool.html">Create a pool</a>
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
