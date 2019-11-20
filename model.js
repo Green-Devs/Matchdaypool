@@ -4,38 +4,48 @@ mongoose.Promise = global.Promise;
 // User model ---------------------------------------------------------------------------------------------------------------------
 
 let userSchema = mongoose.Schema({
-    name: {type: String, require: true},
-    lastname: {type: String, require: true},
-    username: {type: String, require: true},
+    name: { type: String, require: true },
+    lastname: { type: String, require: true },
+    username: { type: String, require: true },
     dob: { type: String, require: true },
-    email: {type: String, require: true},
-    password: {type: String, require: true}
+    email: { type: String, require: true },
+    password: { type: String, require: true }
+
 });
 
 let User = mongoose.model('User', userSchema);
 
 let UserList = {
-    get: function(user){
-        if (user) {
-            return User.find({username: user.username})
-                .then( users => {
-                    return users;
+    get: function (userNameToFind) {
+        if (userNameToFind) {
+            return User.findOne({ username: userNameToFind })
+                .then(user => {
+                    return user;
                 })
-                .catch( error => {
-                    throw Error( error );
+                .catch(error => {
+                    throw Error(error);
                 });
         } else {
             return User.find()
-                .then( users => {
+                .then(users => {
                     return users;
                 })
-                .catch( error => {
-                    throw Error( error );
+                .catch(error => {
+                    throw Error(error);
                 });
         }
-        
+
     },
-    post: function(newUser) {
+    getEmail: function (emailToFind) {
+        return User.findOne({ email: emailToFind })
+            .then(user => {
+                return user;
+            })
+            .catch(error => {
+                throw Error(error);
+            });
+    },
+    register: function (newUser) {
         return User.create(newUser)
             .then(user => {
                 return user;
@@ -48,27 +58,27 @@ let UserList = {
 
 // Pool model ---------------------------------------------------------------------------------------------------------------------
 
-let poolSchema = mongoose.Schema ({
-    name: {type: String, require: true},
-    desc: {type: String, require: true},
-    cost: {type: Number, require: true},
-    private: {type: Boolean, require: true},
-    owner: {type: mongoose.Schema.Types.ObjectId, ref: "User"}
+let poolSchema = mongoose.Schema({
+    name: { type: String, require: true },
+    desc: { type: String, require: true },
+    cost: { type: Number, require: true },
+    private: { type: Boolean, require: true },
+    owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
 });
 
 let Pool = mongoose.model('Pool', poolSchema);
 
 let PoolList = {
-    get: function(){
+    get: function () {
         return Pool.find()
-        .then( pools => {
-            return pools;
-        })
-        .catch( error => {
-            throw Error( error );
-        });
+            .then(pools => {
+                return pools;
+            })
+            .catch(error => {
+                throw Error(error);
+            });
     },
-    post: function(newPool) {
+    post: function (newPool) {
         return Pool.create(newPool)
             .then(pool => {
                 return pool;
@@ -77,8 +87,8 @@ let PoolList = {
                 throw Error(err);
             });
     },
-    update: function(pool) {
-        return Pool.findOneAndUpdate({id:id}, {$set:{pool}},{new:time})
+    update: function (pool) {
+        return Pool.findOneAndUpdate({ id: id }, { $set: { pool } }, { new: time })
             .then(pool => {
                 return pool;
             })
@@ -86,8 +96,8 @@ let PoolList = {
                 throw Error(err);
             });
     },
-    delete: function(poolID) {
-        return Pool.findByIdAndDelete({id:poolID})
+    delete: function (poolID) {
+        return Pool.findByIdAndDelete({ id: poolID })
             .then(pool => {
                 return pool;
             })
@@ -100,8 +110,8 @@ let PoolList = {
 // Teams model ---------------------------------------------------------------------------------------------------------------------
 
 let teamSchema = mongoose.Schema({
-    name: {type: String, require: true},
-    pool: {type: mongoose.Schema.Types.ObjectId, ref: "Pool"}
+    name: { type: String, require: true },
+    pool: { type: mongoose.Schema.Types.ObjectId, ref: "Pool" }
 });
 
 let Team = mongoose.model('Team', teamSchema);
@@ -110,12 +120,12 @@ let TeamList = {};
 
 // Matchday model ---------------------------------------------------------------------------------------------------------------------
 
-let matchdaySchema = mongoose.Schema ({
-    startDate: {type: Date, require: true},
-    finishDate: {type: Date, require: true},
-    teamOne:{type: mongoose.Schema.Types.ObjectId, ref: "Team"},
-    teamTwo: {type: mongoose.Schema.Types.ObjectId, ref: "Team"},
-    pool: {type: mongoose.Schema.Types.ObjectId, ref: "Pool"}
+let matchdaySchema = mongoose.Schema({
+    startDate: { type: Date, require: true },
+    finishDate: { type: Date, require: true },
+    teamOne: { type: mongoose.Schema.Types.ObjectId, ref: "Team" },
+    teamTwo: { type: mongoose.Schema.Types.ObjectId, ref: "Team" },
+    pool: { type: mongoose.Schema.Types.ObjectId, ref: "Pool" }
 });
 
 let Matchday = mongoose.model('Matchday', matchdaySchema);
@@ -125,8 +135,8 @@ let MatchdayList = {};
 // Participants model ---------------------------------------------------------------------------------------------------------------------
 
 let participantsSchema = mongoose.Schema({
-    participant: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
-    pool: {type: mongoose.Schema.Types.ObjectId, ref: "Pool"},
+    participant: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    pool: { type: mongoose.Schema.Types.ObjectId, ref: "Pool" },
 });
 
 let Participants = mongoose.model('Participants', participantsSchema);
@@ -136,9 +146,9 @@ let ParticipantsList = {};
 // Invites model ---------------------------------------------------------------------------------------------------------------------
 
 let invitesSchema = mongoose.Schema({
-    invitee: {type: mongoose.Schema.Types.ObjectId, ref: "User", require: true},
-    pool: {type: mongoose.Schema.Types.ObjectId, ref: "Pool", require: true},
-    status: {type: "String", require: true}
+    invitee: { type: mongoose.Schema.Types.ObjectId, ref: "User", require: true },
+    pool: { type: mongoose.Schema.Types.ObjectId, ref: "Pool", require: true },
+    status: { type: "String", require: true }
 });
 
 let Invites = mongoose.model('Invites', participantsSchema);
@@ -148,9 +158,9 @@ let InvitesList = {};
 // Votes model ---------------------------------------------------------------------------------------------------------------------
 
 let voteSchema = mongoose.Schema({
-    participant: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
-    matchdays: {type: mongoose.Schema.Types.ObjectId, ref: "Matchday"},
-    winner:{type: mongoose.Schema.Types.ObjectId, ref: "Team"},
+    participant: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    matchdays: { type: mongoose.Schema.Types.ObjectId, ref: "Matchday" },
+    winner: { type: mongoose.Schema.Types.ObjectId, ref: "Team" },
 });
 
 let Vote = mongoose.model('Vote', voteSchema);
@@ -196,7 +206,7 @@ let VoteList = {};
 // 					throw Error( error );
 // 				});
 //         }
-		
+
 // 	},
 //     post: function(newPet) {
 //         return Pet.create(newPet)
@@ -209,4 +219,4 @@ let VoteList = {};
 //     }
 // }
 
-module.exports = {PoolList, MatchdayList, TeamList, UserList, VoteList, ParticipantsList, InvitesList};
+module.exports = { PoolList, MatchdayList, TeamList, UserList, VoteList, ParticipantsList, InvitesList };

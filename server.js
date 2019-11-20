@@ -49,9 +49,23 @@ app.get("/api/getUser/:id", jsonParser, (req, res, next) => {
     
 })
 
+app.get("/api/Users", jsonParser, (req, res, next) => {
+    UserList.get()
+        .then(users => {
+            return res.status(201).json(users);
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong with the DB";
+            return res.status(500).json({
+                message: "Something went wrong with the DB",
+                status: 500
+            })
+        });
+});
+
 // POST Methods ----------------------------------------------------------------------------------------------------
 
-app.post("/api/postUser", jsonParser, ( req, res, next ) => {
+app.post("/api/registerUser", jsonParser, ( req, res, next ) => {
     let {name, lastname, username, dob, email, password} = req.body;
 
     if (!name || !lastname || !username || !email || !password) {
@@ -71,9 +85,49 @@ app.post("/api/postUser", jsonParser, ( req, res, next ) => {
         password
     };
 
-    UserList.post(newUser)
-        .then(user => {
-            return res.status(201).json(user);
+    UserList.getEmail(email)
+        .then(userEmail => {
+            if (!userEmail) {
+                UserList.get(username)
+                    .then(user => {
+                        if (!user) {
+                            return bcrypt.hash(password, 10);
+                        }
+                        else {
+                            return res.status(409).json({
+                                message: "Username is already taken",
+                                status: 409
+                            })
+                        }
+                    })
+                    .then(hashPass => {
+                        newUser.password = hashPass;
+                        UserList.register(newUser)
+                            .then(user => {
+                                return res.status(201).json(user);
+                            })
+                            .catch(err => {
+                                res.statusMessage = "Something went wrong with the DB";
+                                return res.status(500).json({
+                                    message: "Something went wrong with the DB",
+                                    status: 500
+                                })
+                            });
+                    })
+                    .catch(err => {
+                        res.statusMessage = "Something went wrong with the DB";
+                        return res.status(500).json({
+                            message: "Something went wrong with the DB",
+                            status: 500
+                        })
+                    })
+            }
+            else {
+                return res.status(409).json({
+                    message: "Email is already taken",
+                    status: 409
+                })
+            }
         })
         .catch(err => {
             res.statusMessage = "Something went wrong with the DB";
@@ -81,21 +135,7 @@ app.post("/api/postUser", jsonParser, ( req, res, next ) => {
                 message: "Something went wrong with the DB",
                 status: 500
             })
-        });
-});
-
-app.get("/api/Users", jsonParser, (req, res, next) => {
-    UserList.get()
-        .then(users => {
-            return res.status(201).json(users);
         })
-        .catch(err => {
-            res.statusMessage = "Something went wrong with the DB";
-            return res.status(500).json({
-                message: "Something went wrong with the DB",
-                status: 500
-            })
-        });
 });
 
 app.post("api/login", jsonParser, (req, res, next) => {
