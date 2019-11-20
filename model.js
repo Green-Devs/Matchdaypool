@@ -4,36 +4,46 @@ mongoose.Promise = global.Promise;
 // User model ---------------------------------------------------------------------------------------------------------------------
 
 let userSchema = mongoose.Schema({
-    name: {type: String, require: true},
-    lastname: {type: String, require: true},
-    username: {type: String, require: true},
-    email: {type: String, require: true},
-    password: {type: String, require: true},
-    
+    name: { type: String, require: true },
+    lastname: { type: String, require: true },
+    username: { type: String, require: true },
+    dob: { type: String, require: true },
+    email: { type: String, require: true },
+    password: { type: String, require: true }
+
 });
 
 let User = mongoose.model('User', userSchema);
 
 let UserList = {
-    get: function(user){
-        if (user) {
-            return User.find({username: user.username, password: user.password})
-                .then( users => {
-                    return users;
+    get: function (userNameToFind) {
+        if (userNameToFind) {
+            return User.findOne({ username: userNameToFind })
+                .then(user => {
+                    return user;
                 })
-                .catch( error => {
-                    throw Error( error );
+                .catch(error => {
+                    throw Error(error);
                 });
         } else {
             return User.find()
-                .then( users => {
+                .then(users => {
                     return users;
                 })
-                .catch( error => {
-                    throw Error( error );
+                .catch(error => {
+                    throw Error(error);
                 });
         }
-        
+
+    },
+    getEmail: function (emailToFind) {
+        return User.findOne({ email: emailToFind })
+            .then(user => {
+                return user;
+            })
+            .catch(error => {
+                throw Error(error);
+            });
     },
     getById: function(userID) {
         return User.findById(userID)
@@ -98,7 +108,7 @@ let PoolList = {
             });
         
     },
-    post: function(newPool) {
+    post: function (newPool) {
         return Pool.create(newPool)
             .then(pool => {
                 return pool;
@@ -108,7 +118,7 @@ let PoolList = {
             });
     },
     update: function(pool) {
-        return Pool.findOneAndUpdate({id:pool.id}, {$set:{pool}})
+        return Pool.findOneAndUpdate({ id:pool.id }, { $set:{pool} })
             .then(pool => {
                 return pool;
             })
@@ -116,8 +126,8 @@ let PoolList = {
                 throw Error(err);
             });
     },
-    delete: function(poolID) {
-        return Pool.findByIdAndDelete(poolID)
+    delete: function (poolID) {
+        return Pool.findByIdAndDelete({ id: poolID })
             .then(pool => {
                 return pool;
             })
@@ -316,9 +326,9 @@ let ParticipantsList = {
 // Invites model ---------------------------------------------------------------------------------------------------------------------
 
 let invitesSchema = mongoose.Schema({
-    invitee: {type: mongoose.Schema.Types.ObjectId, ref: "User", require: true},
-    pool: {type: mongoose.Schema.Types.ObjectId, ref: "Pool", require: true},
-    status: {type: "String", require: true}
+    invitee: { type: mongoose.Schema.Types.ObjectId, ref: "User", require: true },
+    pool: { type: mongoose.Schema.Types.ObjectId, ref: "Pool", require: true },
+    status: { type: "String", require: true }
 });
 
 let Invites = mongoose.model('Invites', invitesSchema);
@@ -433,7 +443,7 @@ let VoteList = {
 // 					throw Error( error );
 // 				});
 //         }
-		
+
 // 	},
 //     post: function(newPet) {
 //         return Pet.create(newPet)
