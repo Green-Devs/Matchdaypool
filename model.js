@@ -54,7 +54,7 @@ let UserList = {
                 throw Error( error );
             });
     },
-    post: function(newUser) {
+    register: function(newUser) {
         return User.create(newUser)
             .then(user => {
                 return user;

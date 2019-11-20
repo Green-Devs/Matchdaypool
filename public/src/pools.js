@@ -1,3 +1,5 @@
+document.querySelector("#nav-item-public-pools").classList.add("active");
+
 let owner;
 
 function getPools() {
