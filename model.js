@@ -17,7 +17,7 @@ let User = mongoose.model('User', userSchema);
 let UserList = {
     get: function(user){
         if (user) {
-            return User.find({username: user.username})
+            return User.find({username: user.username, password: user.password})
                 .then( users => {
                     return users;
                 })
@@ -34,6 +34,15 @@ let UserList = {
                 });
         }
         
+    },
+    getById: function(userID) {
+        return User.findById(userID)
+            .then( users => {
+                return users;
+            })
+            .catch( error => {
+                throw Error( error );
+            });
     },
     post: function(newUser) {
         return User.create(newUser)
@@ -106,7 +115,17 @@ let teamSchema = mongoose.Schema({
 
 let Team = mongoose.model('Team', teamSchema);
 
-let TeamList = {};
+let TeamList = {
+    post: function(newTeam) {
+        return Team.create(newTeam)
+            .then(team => {
+                return team;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    }
+};
 
 // Matchday model ---------------------------------------------------------------------------------------------------------------------
 
@@ -120,7 +139,26 @@ let matchdaySchema = mongoose.Schema ({
 
 let Matchday = mongoose.model('Matchday', matchdaySchema);
 
-let MatchdayList = {};
+let MatchdayList = {
+    get: function(poolID) {
+        return Matchday.find({pool: poolID})
+            .then(matchdays => {
+                return matchdays;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    post: function(newMatchday) {
+        return Matchday.create(newMatchday)
+            .then(matchday => {
+                return matchday;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    }
+};
 
 // Participants model ---------------------------------------------------------------------------------------------------------------------
 
