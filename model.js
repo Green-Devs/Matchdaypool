@@ -69,13 +69,34 @@ let Pool = mongoose.model('Pool', poolSchema);
 
 let PoolList = {
     get: function(){
-        return Pool.find()
-        .then( pools => {
-            return pools;
-        })
-        .catch( error => {
-            throw Error( error );
-        });
+        if (poolID) {
+            return Pool.find({_id: poolID})
+                .then( pools => {
+                    return pools;
+                })
+                .catch( error => {
+                    throw Error( error );
+                });
+        } else {
+            return Pool.find()
+                .then( pools => {
+                    return pools;
+                })
+                .catch( error => {
+                    throw Error( error );
+                });
+        }
+        
+    },
+    getUserPools: function(ownerID){
+        return Pool.find({owner: ownerID})
+            .then( pools => {
+                return pools;
+            })
+            .catch( error => {
+                throw Error( error );
+            });
+        
     },
     post: function(newPool) {
         return Pool.create(newPool)
