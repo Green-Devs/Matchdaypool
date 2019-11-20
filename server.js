@@ -6,7 +6,7 @@ let jsonParser = bp.json();
 
 let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-let {PoolList, MatchdayList, TeamList, UserList, VoteList, ParticipantsList, InvitesList} = require('./model');
+let {PoolList, MatchdayList, TeamList, UserList, VoteList, ParticipantsList, InvitesList, MatchList} = require('./model');
 let {DATABASE_URL, PORT} = require('./config');
 
 let app = express();
@@ -24,17 +24,56 @@ app.use((req, res, next) => {
 app.get("/api/getPools", jsonParser, ( req, res, next ) => {
     PoolList.get()
         .then( pools => {
-            if (req.body.id) {
-                let userPools = [];
-                for (let i = 0; i < pools.length; i++) {
-                    if (pools[i].owner = req.body.id) {
-                        userPools.push(pools[i]);
-                    }
-                }
-                return res.status ( 200 ).json( userPools );
-            } else {
-                return res.status( 200 ).json( pools );
-            }
+            return res.status( 200 ).json( pools );
+        })
+        .catch( error => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : res.statusMessage
+            })
+        });
+});
+
+app.get("/api/getUserPools/:id", jsonParser, ( req, res, next ) => {
+    PoolList.getUserPools(req.params.id)
+        .then( pools => {
+            return res.status( 200 ).json( pools );
+        })
+        .catch( error => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : res.statusMessage
+            })
+        });
+});
+
+app.get("/api/getPools/:id", jsonParser, ( req, res, next ) => {
+    PoolList.get(req.params.id)
+        .then( pool => {
+            MatchdayList.get(pool._id)
+                .then(matchdays => {
+                    console.log(matchdays);
+                })
+                .catch(error =>{
+                    res.statusMessage = "Something went wrong with the DB. Try again later.";
+                    return res.status( 500 ).json({
+                        status : 500,
+                        message : res.statusMessage
+                    })
+                });
+            return res.status( 200 ).json( pool );
+        })
+        .catch( error => {
+            
+        });
+});
+
+app.get("/api/getUser/:id", jsonParser, (req, res, next) => {
+    UserList.getById(req.params.id)
+        .then( user => {
+            return res.status ( 200 ).json( user );
         })
         .catch( error => {
             res.statusMessage = "Something went wrong with the DB. Try again later.";
@@ -43,10 +82,6 @@ app.get("/api/getPools", jsonParser, ( req, res, next ) => {
                 message : "Something went wrong with the DB. Try again later."
             })
         });
-});
-
-app.get("/api/getUser/:id", jsonParser, (req, res, next) => {
-    
 })
 
 app.get("/api/Users", jsonParser, (req, res, next) => {
@@ -60,6 +95,31 @@ app.get("/api/Users", jsonParser, (req, res, next) => {
                 message: "Something went wrong with the DB",
                 status: 500
             })
+
+        })
+});
+
+app.get("/api/getMatches", jsonParser, (req, res, next) => {
+    MatchdayList.get(req.query.poolID)
+        .then( matchday => {
+            MatchList.get(matchday._id)
+                .then( matches => {
+                    return res.status ( 200 ).json( matches );
+                })
+                .catch( error => {
+                    res.statusMessage = "Something went wrong with the DB. Try again later.";
+                    return res.status( 500 ).json({
+                        status : 500,
+                        message : res.statusMessage
+                    });
+                });
+        })
+        .catch( error => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : res.statusMessage
+            });
         });
 });
 
@@ -71,7 +131,7 @@ app.post("/api/registerUser", jsonParser, ( req, res, next ) => {
     if (!name || !lastname || !username || !email || !password) {
         res.statusMessage = "Missing field in the body";
         return res.status(406).json( {
-            message: "Missing field in the body",
+            message: res.statusMessage,
             status: 406
         })
     }
@@ -138,7 +198,7 @@ app.post("/api/registerUser", jsonParser, ( req, res, next ) => {
         })
 });
 
-app.post("api/login", jsonParser, (req, res, next) => {
+app.post("/api/login", jsonParser, (req, res, next) => {
     let {username, password} = req.body;
 
     let user = {username, password};
@@ -153,6 +213,75 @@ app.post("api/login", jsonParser, (req, res, next) => {
 				message : "Something went wrong with the DB. Try again later."
 			})
 		});
+});
+
+app.post("/api/postPool", jsonParser, (req, res, next) => {
+    let newPool = {
+        name: req.body.name,
+        desc: req.body.desc,
+        cost: req.body.cost,
+        private: req.body.private,
+        owner: req.body.owner
+    };
+
+    PoolList.post(newPool)
+        .then(createdPool => {
+            let matches = req.body.matchday;
+            for (let i = 0; i < matches.length; i++) {
+                let newTeamOne = {
+                    name: matches[i].teamOne,
+                    pool: createdPool._id
+                }
+                TeamList.post(newTeamOne)
+                    .then(teamOne => {
+                        let newTeamTwo = {
+                            name: matches[i].teamTwo,
+                            pool: createdPool._id
+                        }
+                        TeamList.post(newTeamTwo)
+                            .then(teamTwo => {
+                                let newMatch = {
+                                    startDate: matches[i].startDate,
+                                    finishDate: matches[i].finishDate,
+                                    teamOne: teamOne._id,
+                                    teamTwoo: teamTwo._id,
+                                    pool: createdPool._id
+                                }
+                                MatchdayList.post(newMatch)
+                                    .then(newMatch => {})
+                                    .catch(err => {
+                                        res.statusMessage = "Something went wrong with the DB. Try again later.";
+                                        return res.status( 500 ).json({
+                                            status : 500,
+                                            message : "Something went wrong with the DB. Try again later."
+                                        })
+                                    })
+                            })
+                            .catch(err => {
+                                res.statusMessage = "Something went wrong with the DB. Try again later.";
+                                return res.status( 500 ).json({
+                                    status : 500,
+                                    message : "Something went wrong with the DB. Try again later."
+                                })
+                            })
+                    })
+                    .catch(err => {
+                        res.statusMessage = "Something went wrong with the DB. Try again later.";
+                        return res.status( 500 ).json({
+                            status : 500,
+                            message : "Something went wrong with the DB. Try again later."
+                        })
+                    })
+            }
+            return res.status( 202 ).json( createdPool );
+        })
+        .catch( error => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : "Something went wrong with the DB. Try again later."
+            })
+        });
 });
 
 // PUT Methods ----------------------------------------------------------------------------------------------------

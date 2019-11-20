@@ -45,7 +45,16 @@ let UserList = {
                 throw Error(error);
             });
     },
-    register: function (newUser) {
+    getById: function(userID) {
+        return User.findById(userID)
+            .then( users => {
+                return users;
+            })
+            .catch( error => {
+                throw Error( error );
+            });
+    },
+    post: function(newUser) {
         return User.create(newUser)
             .then(user => {
                 return user;
@@ -58,25 +67,46 @@ let UserList = {
 
 // Pool model ---------------------------------------------------------------------------------------------------------------------
 
-let poolSchema = mongoose.Schema({
-    name: { type: String, require: true },
-    desc: { type: String, require: true },
-    cost: { type: Number, require: true },
-    private: { type: Boolean, require: true },
-    owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
+let poolSchema = mongoose.Schema ({
+    name: {type: String, require: true},
+    desc: {type: String, require: true},
+    cost: {type: Number, require: true},
+    private: {type: Boolean, require: true},
+    owner: {type: mongoose.Schema.Types.ObjectId, ref: "User", require: true}
 });
 
 let Pool = mongoose.model('Pool', poolSchema);
 
 let PoolList = {
-    get: function () {
-        return Pool.find()
-            .then(pools => {
+    get: function(){
+        if (poolID) {
+            return Pool.find({_id: poolID})
+                .then( pools => {
+                    return pools;
+                })
+                .catch( error => {
+                    throw Error( error );
+                });
+        } else {
+            return Pool.find()
+                .then( pools => {
+                    return pools;
+                })
+                .catch( error => {
+                    throw Error( error );
+                });
+        }
+        
+    },
+    getUserPools: function(ownerID){
+        return Pool.find({owner: ownerID})
+            .then( pools => {
                 return pools;
             })
-            .catch(error => {
-                throw Error(error);
+            .catch( error => {
+                throw Error( error );
             });
+        
     },
     post: function (newPool) {
         return Pool.create(newPool)
@@ -87,8 +117,8 @@ let PoolList = {
                 throw Error(err);
             });
     },
-    update: function (pool) {
-        return Pool.findOneAndUpdate({ id: id }, { $set: { pool } }, { new: time })
+    update: function(pool) {
+        return Pool.findOneAndUpdate({ id:pool.id }, { $set:{pool} })
             .then(pool => {
                 return pool;
             })
@@ -110,38 +140,188 @@ let PoolList = {
 // Teams model ---------------------------------------------------------------------------------------------------------------------
 
 let teamSchema = mongoose.Schema({
-    name: { type: String, require: true },
-    pool: { type: mongoose.Schema.Types.ObjectId, ref: "Pool" }
+    name: {type: String, require: true},
+    pool: {type: mongoose.Schema.Types.ObjectId, ref: "Pool", require: true}
 });
 
 let Team = mongoose.model('Team', teamSchema);
 
-let TeamList = {};
+let TeamList = {
+    get: function (teamID) {
+        return Team.find({_id: teamID})
+            .then(teams => {
+                return teams;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    post: function(newTeam) {
+        return Team.create(newTeam)
+            .then(team => {
+                return team;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    delete: function(matchID) {
+        return Team.deleteMany({match: matchID})
+            .then(teams => {
+                return teams;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    }
+};
 
 // Matchday model ---------------------------------------------------------------------------------------------------------------------
 
-let matchdaySchema = mongoose.Schema({
-    startDate: { type: Date, require: true },
-    finishDate: { type: Date, require: true },
-    teamOne: { type: mongoose.Schema.Types.ObjectId, ref: "Team" },
-    teamTwo: { type: mongoose.Schema.Types.ObjectId, ref: "Team" },
-    pool: { type: mongoose.Schema.Types.ObjectId, ref: "Pool" }
+let matchdaySchema = mongoose.Schema ({
+    startDate: {type: Date, require: true},
+    finishDate: {type: Date, require: true},
+    pool: {type: mongoose.Schema.Types.ObjectId, ref: "Pool", require: true}
 });
 
 let Matchday = mongoose.model('Matchday', matchdaySchema);
 
-let MatchdayList = {};
+let MatchdayList = {
+    get: function(poolID) {
+        return Matchday.find({pool: poolID})
+            .then(matchdays => {
+                return matchdays;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    post: function(newMatchday) {
+        return Matchday.create(newMatchday)
+            .then(matchday => {
+                return matchday;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    put: function(pool) {
+        return Matchday.updateOne({_id: pool.id}, pool)
+            .then(matchday => {
+                return matchday;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    delete: function (matchdayID) {
+        return Matchday.findByIdAndDelete(matchdayID)
+            .then(matchday => {
+                return matchday;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    }
+};
+
+// Match model ---------------------------------------------------------------------------------------------------------------------
+
+let matchSchema = mongoose.Schema ({
+    teamOne:{type: mongoose.Schema.Types.ObjectId, ref: "Team", require: true},
+    teamTwo: {type: mongoose.Schema.Types.ObjectId, ref: "Team", require: true},
+    matchday: {type: mongoose.Schema.Types.ObjectId, ref: "Matchday", require: true}
+});
+
+let Match = mongoose.model('Match', matchSchema);
+
+let MatchList = {
+    get: function(poolID) {
+        return Match.find({pool: poolID})
+            .then(matches => {
+                return matches;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    post: function(newMatch) {
+        return Match.create(newMatch)
+            .then(match => {
+                return match;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    put: function(match) {
+        return Match.updateOne({_id: match.id}, match)
+            .then(match => {
+                return match;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    delete: function(matchdayID) {
+        return Match.deleteMany({matchday: matchdayID})
+            .then(matches => {
+                return matches;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    }
+};
 
 // Participants model ---------------------------------------------------------------------------------------------------------------------
 
 let participantsSchema = mongoose.Schema({
-    participant: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    pool: { type: mongoose.Schema.Types.ObjectId, ref: "Pool" },
+    participant: {type: mongoose.Schema.Types.ObjectId, ref: "User", require: true},
+    pool: {type: mongoose.Schema.Types.ObjectId, ref: "Pool", require: true},
+    coveredCost: {type: Boolean, require: true}
 });
 
 let Participants = mongoose.model('Participants', participantsSchema);
 
-let ParticipantsList = {};
+let ParticipantsList = {
+    get: function(poolID) {
+        return Participants.find({pool: poolID})
+            .then(participants => {
+                return participants;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    post: function (newParticipation) {
+        return Participants.create(newParticipation)
+            .then(participation => {
+                return participation;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    put: function (participation) {
+        return Participants.updateOne({_id: participation.id}, participation)
+            .then(participation => {
+                return participation;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    delete: function (participationID) {
+        return Participants.deleteOne({_id: participationID})
+            .then(participants => {
+                return participants;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    }
+};
 
 // Invites model ---------------------------------------------------------------------------------------------------------------------
 
@@ -151,21 +331,78 @@ let invitesSchema = mongoose.Schema({
     status: { type: "String", require: true }
 });
 
-let Invites = mongoose.model('Invites', participantsSchema);
+let Invites = mongoose.model('Invites', invitesSchema);
 
-let InvitesList = {};
+let InvitesList = {
+    get: function(inviteeID) {
+        return Invites.find({invitee: inviteeID})
+            .then(invites => {
+                return invites;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    post : function(newInvite) {
+        return Invites.create(newInvite)
+            .then(invite => {
+                return invite;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    put : function(updatedInvite) {
+        return Invites.updateOne({_id: updatedInvite.id}, updatedInvite)
+            .then(invite => {
+                return invite;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    }
+};
 
 // Votes model ---------------------------------------------------------------------------------------------------------------------
 
 let voteSchema = mongoose.Schema({
-    participant: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    matchdays: { type: mongoose.Schema.Types.ObjectId, ref: "Matchday" },
-    winner: { type: mongoose.Schema.Types.ObjectId, ref: "Team" },
+    participant: {type: mongoose.Schema.Types.ObjectId, ref: "User", require: true},
+    match: {type: mongoose.Schema.Types.ObjectId, ref: "Match", require: true},
+    winner: {type: mongoose.Schema.Types.ObjectId, ref: "Team"},
+    draw: {type: Boolean}
 });
 
 let Vote = mongoose.model('Vote', voteSchema);
 
-let VoteList = {};
+let VoteList = {
+    get: function (matchID) {
+        return Vote.find({match: matchID})
+            .then(vote => {
+                return vote;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    post: function (newVote) {
+        return Vote.create(newVote)
+            .then(vote => {
+                return vote;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    put: function (updatedVote) {
+        return Vote.create({_id: updatedVote.id}, updatedVote)
+            .then(vote => {
+                return vote;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    }
+};
 
 // Example of models ---------------------------------------------------------------------------------------------------------------------
 
@@ -219,4 +456,4 @@ let VoteList = {};
 //     }
 // }
 
-module.exports = { PoolList, MatchdayList, TeamList, UserList, VoteList, ParticipantsList, InvitesList };
+module.exports = {PoolList, MatchdayList, TeamList, UserList, VoteList, ParticipantsList, InvitesList, MatchList};
