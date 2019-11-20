@@ -18,6 +18,12 @@ function createNavBar() {
                 <li class="nav-item">
                     <a class="nav-link" href="publicPools.html">Public Pools</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="publicPools.html">My Pools</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="publicPools.html">Create a pool</a>
+                </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search for a pool" aria-label="Search">
