@@ -32,7 +32,7 @@ function getPools() {
                             <div class="name">${responseJSON[i].name}</div>
                             <div class="desc">${responseJSON[i].desc}</div>
                             <div class="cost">${responseJSON[i].cost}</div>
-                            <div class="owner" hidden>${owner}</div>
+                            <div class="owner">${owner}</div>
                         </div>
                         `);
                     

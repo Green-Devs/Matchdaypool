@@ -6,7 +6,7 @@ let jsonParser = bp.json();
 
 let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-let {PoolList, MatchdayList, TeamList, UserList, VoteList, ParticipantsList, InvitesList} = require('./model');
+let {PoolList, MatchdayList, TeamList, UserList, VoteList, ParticipantsList, InvitesList, MatchList} = require('./model');
 let {DATABASE_URL, PORT} = require('./config');
 
 let app = express();
