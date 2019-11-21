@@ -177,12 +177,12 @@ app.post("/api/registerUser", jsonParser, ( req, res, next ) => {
                     })
                     .then(hashPass => {
                         newUser.password = hashPass;
-                        UserList.post(newUser)
+                        UserList.register(newUser)
                             .then(user => {
                                 return res.status(201).json(user);
                             })
                             .catch(err => {
-                                res.statusMessage = "Something went wrong with the DB hash";
+                                res.statusMessage = "Something went wrong with the DB";
                                 return res.status(500).json({
                                     message: "Something went wrong with the DB",
                                     status: 500
@@ -190,7 +190,7 @@ app.post("/api/registerUser", jsonParser, ( req, res, next ) => {
                             });
                     })
                     .catch(err => {
-                        res.statusMessage = "Something went wrong with the DB get";
+                        res.statusMessage = "Something went wrong with the DB";
                         return res.status(500).json({
                             message: "Something went wrong with the DB",
                             status: 500
