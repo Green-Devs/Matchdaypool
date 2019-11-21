@@ -37,9 +37,10 @@ function getPools() {
                             <div class="owner">${owner}</div>
                         </div>
                         `);
-                    
                 }
             }
+
+            $(".spinner-border").hide();
             
         },
         error: function(err){

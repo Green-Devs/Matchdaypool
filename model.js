@@ -78,7 +78,7 @@ let poolSchema = mongoose.Schema ({
 let Pool = mongoose.model('Pool', poolSchema);
 
 let PoolList = {
-    get: function(){
+    get: function(poolID){
         if (poolID) {
             return Pool.find({_id: poolID})
                 .then( pools => {
