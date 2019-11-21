@@ -36,9 +36,29 @@ app.get("/api/getPools", jsonParser, ( req, res, next ) => {
 });
 
 app.get("/api/getUserPools/:id", jsonParser, ( req, res, next ) => {
+    let userPools = {
+        ownedPools: [],
+        participatingPools: []
+    }
+
     PoolList.getUserPools(req.params.id)
-        .then( pools => {
-            return res.status( 200 ).json( pools );
+        .then( ownedPools => {
+
+            userPools.ownedPools = ownedPools;
+            
+            ParticipantsList.getByUser(req.params.id)
+                .then( participatingPools => {
+
+                    userPools.participatingPools = participatingPools;
+                    return res.status( 200 ).json( userPools );
+                })
+                .catch( error => {
+                    res.statusMessage = "Something went wrong with the DB. Try again later.";
+                    return res.status( 500 ).json({
+                        status : 500,
+                        message : res.statusMessage
+                    })
+                });
         })
         .catch( error => {
             res.statusMessage = "Something went wrong with the DB. Try again later.";
@@ -49,13 +69,19 @@ app.get("/api/getUserPools/:id", jsonParser, ( req, res, next ) => {
         });
 });
 
-// NOT FINISHED
-app.get("/api/getPools/:id", jsonParser, ( req, res, next ) => {
+app.get("/api/getPool/:id", jsonParser, ( req, res, next ) => {
+    let searchedPool = {
+        pool: {},
+        matchdays: [],
+        matches: [],
+        teams: []
+    }
     PoolList.get(req.params.id)
         .then( pool => {
+            searchedPool.pool = pool;
             MatchdayList.get(pool._id)
                 .then(matchdays => {
-                    console.log(matchdays);
+                    searchedPool.matchdays = matchdays;
                 })
                 .catch(error =>{
                     res.statusMessage = "Something went wrong with the DB. Try again later.";
@@ -64,14 +90,42 @@ app.get("/api/getPools/:id", jsonParser, ( req, res, next ) => {
                         message : res.statusMessage
                     })
                 });
-            return res.status( 200 ).json( pool );
+            MatchList.getByPool(pool._id)
+                .then(matches => {
+                    searchedPool.matches = matches;
+                })
+                .catch(error =>{
+                    res.statusMessage = "Something went wrong with the DB. Try again later.";
+                    return res.status( 500 ).json({
+                        status : 500,
+                        message : res.statusMessage
+                    })
+                });
+
+            TeamList.getByPool(pool._id)
+                .then(teams => {
+                    searchedPool.teams = teams;
+                })
+                .catch(error =>{
+                    res.statusMessage = "Something went wrong with the DB. Try again later.";
+                    return res.status( 500 ).json({
+                        status : 500,
+                        message : res.statusMessage
+                    })
+                });
+            return res.status( 200 ).json( searchedPool );
         })
         .catch( error => {
-            
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+                return res.status( 500 ).json({
+                    status : 500,
+                    message : res.statusMessage
+                })
         });
 });
 
 app.get("/api/getUser/:id", jsonParser, (req, res, next) => {
+
     UserList.getById(req.params.id)
         .then( user => {
             return res.status ( 200 ).json( user );
@@ -262,7 +316,8 @@ app.post("/api/createPool", jsonParser, (req, res, next) => {
         desc: req.body.desc,
         cost: req.body.cost,
         private: req.body.private,
-        owner: req.body.owner
+        owner: req.body.owner,
+        sport: req.body.sport
     };
 
     let returnPool = {
@@ -374,6 +429,17 @@ app.put("/api/updateInvite", jsonParser, (req, res, next) => {
 
     InvitesList.put({invitee, pool, status})
         .then(invite => {
+            if (status = "Accepted") {
+                ParticipantsList.post({participant: invitee, pool: pool, coveredCost: false})
+                    .then(participation => {})
+                    .catch( error => {
+                        res.statusMessage = "Something went wrong with the DB. Try again later.";
+                        return res.status( 500 ).json({
+                            status : 500,
+                            message : res.statusMessage
+                        })
+                    });
+            }
 			return res.status( 202 ).json( invite );
 		})
 		.catch( error => {
@@ -400,6 +466,34 @@ app.put("/api/updateUser", jsonParser, (req, res, next) => {
             })
         });
 });
+
+app.put("/api/updatePoolinfo", jsonParser, (req, res, next) => {
+    let updatedPool = {
+        name: req.body.name,
+        desc: req.body.desc,
+        cost: req.body.cost,
+        private: req.body.private,
+        owner: req.body.owner,
+        sport: req.body.sport
+    }
+
+    PoolList.update(updatedPool)
+        .then(updatedPool => {
+
+            return res.status( 202 ).json( updatedPool );
+        })
+        .catch( error => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : res.statusMessage
+            })
+        });
+    
+    
+});
+
+app.put("/api/updateMatchday", jsonParser, (req, res, next) => {});
 
 // DELETE Methods ----------------------------------------------------------------------------------------------------
 
