@@ -22,8 +22,7 @@ function signup() {
             contentType: "application/json", // type of sent data in the request
             success: function(responseJSON){
                 console.log("success", responseJSON);
-                localStorage.setItem("userID", responseJSON._id);
-                window.location.href = './publicPools.html';
+                window.location.href = './index.html';
             },
             error: function(err){
                 console.log("err", err);
