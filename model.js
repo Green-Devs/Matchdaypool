@@ -165,6 +165,15 @@ let TeamList = {
                 throw Error(err);
             });
     },
+    getByPool: function(poolID) {
+        return Team.find({pool: poolID})
+            .then(teams => {
+                return teams;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
     post: function(newTeam) {
         return Team.create(newTeam)
             .then(team => {
@@ -248,7 +257,8 @@ let MatchdayList = {
 let matchSchema = mongoose.Schema ({
     teamOne:{type: mongoose.Schema.Types.ObjectId, ref: "Team", require: true},
     teamTwo: {type: mongoose.Schema.Types.ObjectId, ref: "Team", require: true},
-    matchday: {type: mongoose.Schema.Types.ObjectId, ref: "Matchday", require: true}
+    matchday: {type: mongoose.Schema.Types.ObjectId, ref: "Matchday", require: true},
+    pool: {type: mongoose.Schema.Types.ObjectId, ref: "Pool", require: true}
 });
 
 let Match = mongoose.model('Match', matchSchema);
@@ -256,6 +266,15 @@ let Match = mongoose.model('Match', matchSchema);
 let MatchList = {
     get: function(matchdayID) {
         return Match.find({matchday: matchdayID})
+            .then(matches => {
+                return matches;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    getByPool: function (poolID) {
+        return Match.find({pool: poolID})
             .then(matches => {
                 return matches;
             })

@@ -69,13 +69,19 @@ app.get("/api/getUserPools/:id", jsonParser, ( req, res, next ) => {
         });
 });
 
-// NOT FINISHED
-app.get("/api/getPools/:id", jsonParser, ( req, res, next ) => {
+app.get("/api/getPool/:id", jsonParser, ( req, res, next ) => {
+    let searchedPool = {
+        pool: {},
+        matchdays: [],
+        matches: [],
+        teams: []
+    }
     PoolList.get(req.params.id)
         .then( pool => {
+            searchedPool.pool = pool;
             MatchdayList.get(pool._id)
                 .then(matchdays => {
-                    console.log(matchdays);
+                    searchedPool.matchdays = matchdays;
                 })
                 .catch(error =>{
                     res.statusMessage = "Something went wrong with the DB. Try again later.";
@@ -84,10 +90,37 @@ app.get("/api/getPools/:id", jsonParser, ( req, res, next ) => {
                         message : res.statusMessage
                     })
                 });
-            return res.status( 200 ).json( pool );
+            MatchList.getByPool(pool._id)
+                .then(matches => {
+                    searchedPool.matches = matches;
+                })
+                .catch(error =>{
+                    res.statusMessage = "Something went wrong with the DB. Try again later.";
+                    return res.status( 500 ).json({
+                        status : 500,
+                        message : res.statusMessage
+                    })
+                });
+
+            TeamList.getByPool(pool._id)
+                .then(teams => {
+                    searchedPool.teams = teams;
+                })
+                .catch(error =>{
+                    res.statusMessage = "Something went wrong with the DB. Try again later.";
+                    return res.status( 500 ).json({
+                        status : 500,
+                        message : res.statusMessage
+                    })
+                });
+            return res.status( 200 ).json( searchedPool );
         })
         .catch( error => {
-            
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+                return res.status( 500 ).json({
+                    status : 500,
+                    message : res.statusMessage
+                })
         });
 });
 
