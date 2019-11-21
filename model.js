@@ -80,6 +80,7 @@ let poolSchema = mongoose.Schema ({
     name: {type: String, require: true},
     desc: {type: String, require: true},
     cost: {type: Number, require: true},
+    sport: {type: String,},
     private: {type: Boolean, require: true},
     owner: {type: mongoose.Schema.Types.ObjectId, ref: "User", require: true}
 });
@@ -158,6 +159,15 @@ let Team = mongoose.model('Team', teamSchema);
 let TeamList = {
     get: function (teamID) {
         return Team.find({_id: teamID})
+            .then(teams => {
+                return teams;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    getByPool: function(poolID) {
+        return Team.find({pool: poolID})
             .then(teams => {
                 return teams;
             })
@@ -248,7 +258,10 @@ let MatchdayList = {
 let matchSchema = mongoose.Schema ({
     teamOne:{type: mongoose.Schema.Types.ObjectId, ref: "Team", require: true},
     teamTwo: {type: mongoose.Schema.Types.ObjectId, ref: "Team", require: true},
-    matchday: {type: mongoose.Schema.Types.ObjectId, ref: "Matchday", require: true}
+    matchday: {type: mongoose.Schema.Types.ObjectId, ref: "Matchday", require: true},
+    pool: {type: mongoose.Schema.Types.ObjectId, ref: "Pool", require: true},
+    winner: {type: mongoose.Schema.Types.ObjectId, ref: "Team"},
+    draw: {type: Boolean}
 });
 
 let Match = mongoose.model('Match', matchSchema);
@@ -256,6 +269,15 @@ let Match = mongoose.model('Match', matchSchema);
 let MatchList = {
     get: function(matchdayID) {
         return Match.find({matchday: matchdayID})
+            .then(matches => {
+                return matches;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    getByPool: function (poolID) {
+        return Match.find({pool: poolID})
             .then(matches => {
                 return matches;
             })
@@ -305,6 +327,15 @@ let Participants = mongoose.model('Participants', participantsSchema);
 let ParticipantsList = {
     get: function(poolID) {
         return Participants.find({pool: poolID})
+            .then(participants => {
+                return participants;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    getByUser: function (userID) {
+        return Participants.find({participant: userID})
             .then(participants => {
                 return participants;
             })
