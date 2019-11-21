@@ -63,6 +63,15 @@ let UserList = {
                 throw Error(err);
             });
     },
+    update: function (updatedUser) {
+        return User.updateOne({_id: updatedUser.id}, updatedUser)
+            .then(user => {
+                return user;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    }
 };
 
 // Pool model ---------------------------------------------------------------------------------------------------------------------
@@ -80,7 +89,7 @@ let Pool = mongoose.model('Pool', poolSchema);
 let PoolList = {
     get: function(poolID){
         if (poolID) {
-            return Pool.find({_id: poolID})
+            return Pool.find({_id: poolID, private: false})
                 .then( pools => {
                     return pools;
                 })
@@ -88,7 +97,7 @@ let PoolList = {
                     throw Error( error );
                 });
         } else {
-            return Pool.find()
+            return Pool.find({private: false})
                 .then( pools => {
                     return pools;
                 })
@@ -165,8 +174,8 @@ let TeamList = {
                 throw Error(err);
             });
     },
-    delete: function(matchID) {
-        return Team.deleteMany({match: matchID})
+    delete: function(poolID) {
+        return Team.deleteMany({pool: poolID})
             .then(teams => {
                 return teams;
             })
@@ -205,8 +214,8 @@ let MatchdayList = {
                 throw Error(err);
             });
     },
-    put: function(pool) {
-        return Matchday.updateOne({_id: pool.id}, pool)
+    put: function(updatedMatchday) {
+        return Matchday.updateOne({_id: updatedMatchday.id}, updatedMatchday)
             .then(matchday => {
                 return matchday;
             })
@@ -218,6 +227,15 @@ let MatchdayList = {
         return Matchday.findByIdAndDelete(matchdayID)
             .then(matchday => {
                 return matchday;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    deleteMany: function(poolID) {
+        return Matchday.deleteMany({pool: poolID})
+            .then(matchdays => {
+                return matchdays;
             })
             .catch(err => {
                 throw Error(err);
@@ -236,8 +254,8 @@ let matchSchema = mongoose.Schema ({
 let Match = mongoose.model('Match', matchSchema);
 
 let MatchList = {
-    get: function(poolID) {
-        return Match.find({pool: poolID})
+    get: function(matchdayID) {
+        return Match.find({matchday: matchdayID})
             .then(matches => {
                 return matches;
             })

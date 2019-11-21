@@ -49,6 +49,7 @@ app.get("/api/getUserPools/:id", jsonParser, ( req, res, next ) => {
         });
 });
 
+// NOT FINISHED
 app.get("/api/getPools/:id", jsonParser, ( req, res, next ) => {
     PoolList.get(req.params.id)
         .then( pool => {
@@ -264,9 +265,16 @@ app.post("/api/createPool", jsonParser, (req, res, next) => {
         owner: req.body.owner
     };
 
+    let returnPool = {
+        pool: newPool,
+        matchdays: [],
+        matches: []
+    }
+
     PoolList.post(newPool)
         .then(createdPool => {
-            let matchdays = req.body.matchday;
+            returnPool.pool = createdPool;
+            let matchdays = req.body.matchdays;
             for (let i = 0; i < matchdays.length; i++) {
                 let newMatchday = {
                     startDate: matchdays[i].startDate,
@@ -276,6 +284,7 @@ app.post("/api/createPool", jsonParser, (req, res, next) => {
 
                 MatchdayList.post(newMatchday)
                     .then(createdMatchday => {
+                        returnPool.matchdays.push(createdMatchday);
                         for (let j = 0; j < matchdays[i].matches; j++) {
                             let newTeamOne = {
                                 name: matches[i].teamOne,
@@ -295,7 +304,9 @@ app.post("/api/createPool", jsonParser, (req, res, next) => {
                                                 matchday: createdMatchday._id
                                             }
                                             MatchList.post(newMatch)
-                                                .then(newMatch => {})
+                                                .then(newMatch => {
+                                                    returnPool.matches.push(newMatch);
+                                                })
                                                 .catch(err => {
                                                     res.statusMessage = "Something went wrong with the DB. Try again later.";
                                                     return res.status( 500 ).json({
@@ -329,7 +340,7 @@ app.post("/api/createPool", jsonParser, (req, res, next) => {
                         })
                     })
             }
-            return res.status( 202 ).json( createdPool );
+            return res.status( 202 ).json( returnPool );
         })
         .catch( error => {
             res.statusMessage = "Something went wrong with the DB. Try again later.";
@@ -374,7 +385,90 @@ app.put("/api/updateInvite", jsonParser, (req, res, next) => {
 		});
 });
 
+app.put("/api/updateUser", jsonParser, (req, res, next) => {
+    let {name, lastname, username, dob, email, password, id} = req.body;
+
+    UserList.update({name, lastname, username, dob, email, password, id})
+        .then(user => {
+            return res.status( 202 ).json( user );
+        })
+        .catch( error => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : res.statusMessage
+            })
+        });
+});
+
 // DELETE Methods ----------------------------------------------------------------------------------------------------
+
+app.delete("/api/deletePool", jsonParser, (req, res, next) => {
+    let erasedPool = {
+        pool: {},
+        matchdays: {},
+        matches: {},
+        teams: {}
+    };
+
+    MatchdayList.get(req.body.id)
+        .then(matchdays => {
+            for (let i = 0; i < matchdays.length; i++) {
+                MatchList.delete(matchdays[i]._id)
+                    .then(matches => {
+                        erasedPool.matches = matches;
+                    })
+                    .catch( error => {
+                        res.statusMessage = "Something went wrong with the DB. Try again later.";
+                        return res.status( 500 ).json({
+                            status : 500,
+                            message : res.statusMessage
+                        })
+                    });
+            }
+        })
+        .catch( error => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : res.statusMessage
+            })
+        });
+    MatchdayList.deleteMany(req.body.id)
+        .then(matchdays => {
+            erasedPool.matchdays = matchdays;
+        })
+        .catch( error => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : res.statusMessage
+            })
+        });
+    TeamList.delete(req.body.id)
+        .then(teams => {
+            erasedPool.teams = teams;
+        })
+        .catch( error => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : res.statusMessage
+            })
+        });
+    PoolList.delete(req.body.id)
+        .then(pool => {
+            erasedPool.pool = pool;
+            return res.status( 202 ).json( erasedPool );
+        })
+        .catch( error => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : res.statusMessage
+            })
+        });
+});
 
 // Examples of bcrypt ---------------------------------------------------------------------------------------------------
 
