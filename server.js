@@ -335,83 +335,36 @@ app.post("/api/createPool", jsonParser, (req, res, next) => {
         sport: req.body.sport
     };
 
-    let returnPool = {
-        pool: newPool,
-        matchdays: [],
-        matches: []
+    let returnObj = {
+        pool: {},
+        teams: []
     }
 
     PoolList.post(newPool)
         .then(createdPool => {
-            returnPool.pool = createdPool;
-            let matchdays = req.body.matchdays;
-            for (let i = 0; i < matchdays.length; i++) {
-                let newMatchday = {
-                    startDate: matchdays[i].startDate,
-                    finishDate: matchdays[i].finishDate,
-                    pool: createdPool._id
-                };
+            returnObj.pool = createdPool;
 
-                MatchdayList.post(newMatchday)
-                    .then(createdMatchday => {
-                        returnPool.matchdays.push(createdMatchday);
-                        for (let j = 0; j < matchdays[i].matches; j++) {
-                            let newTeamOne = {
-                                name: matches[i].teamOne,
-                                pool: createdPool._id
-                            }
-                            TeamList.post(newTeamOne)
-                                .then(teamOne => {
-                                    let newTeamTwo = {
-                                        name: matches[i].teamTwo,
-                                        pool: createdPool._id
-                                    }
-                                    TeamList.post(newTeamTwo)
-                                        .then(teamTwo => {
-                                            let newMatch = {
-                                                teamOne: teamOne._id,
-                                                teamTwoo: teamTwo._id,
-                                                matchday: createdMatchday._id,
-                                                pool: createdPool._id
-                                            }
-                                            MatchList.post(newMatch)
-                                                .then(newMatch => {
-                                                    returnPool.matches.push(newMatch);
-                                                })
-                                                .catch(err => {
-                                                    res.statusMessage = "Something went wrong with the DB. Try again later.";
-                                                    return res.status( 500 ).json({
-                                                        status : 500,
-                                                        message : res.statusMessage
-                                                    })
-                                                })
-                                        })
-                                        .catch(err => {
-                                            res.statusMessage = "Something went wrong with the DB. Try again later.";
-                                            return res.status( 500 ).json({
-                                                status : 500,
-                                                message : res.statusMessage
-                                            })
-                                        })
-                                })
-                                .catch(err => {
-                                    res.statusMessage = "Something went wrong with the DB. Try again later.";
-                                    return res.status( 500 ).json({
-                                        status : 500,
-                                        message : res.statusMessage
-                                    })
-                                }) 
-                        }
+            for (let i = 0; i < req.body.teams.length; i++) {
+                let newTeam = {
+                    name: req.body.teams[i].name,
+                    pool: createdPool._id
+                }
+                TeamList.post(newTeam)
+                    .then(createdTeam => {
+                        returnObj.teams.push(createdTeam);
+                        console.log("teams", returnObj.teams);
                     })
-                    .catch(err => {
+                    .catch( error => {
+                        console.log(error);
                         res.statusMessage = "Something went wrong with the DB. Try again later.";
                         return res.status( 500 ).json({
                             status : 500,
                             message : res.statusMessage
                         })
-                    })
+                    });
             }
-            return res.status( 202 ).json( returnPool );
+
+            return res.status( 202 ).json( returnObj );
         })
         .catch( error => {
             res.statusMessage = "Something went wrong with the DB. Try again later.";
