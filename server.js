@@ -128,7 +128,7 @@ app.get("/api/getMatches", jsonParser, (req, res, next) => {
 app.post("/api/registerUser", jsonParser, ( req, res, next ) => {
     let {name, lastname, username, dob, email, password} = req.body;
 
-    if (!name || !lastname || !username || !email || !password) {
+    if (!name || !lastname || !username || !dob ||!email || !password) {
         res.statusMessage = "Missing field in the body";
         return res.status(406).json( {
             message: res.statusMessage,
@@ -162,12 +162,12 @@ app.post("/api/registerUser", jsonParser, ( req, res, next ) => {
                     })
                     .then(hashPass => {
                         newUser.password = hashPass;
-                        UserList.register(newUser)
+                        UserList.post(newUser)
                             .then(user => {
                                 return res.status(201).json(user);
                             })
                             .catch(err => {
-                                res.statusMessage = "Something went wrong with the DB";
+                                res.statusMessage = "Something went wrong with the DB hash";
                                 return res.status(500).json({
                                     message: "Something went wrong with the DB",
                                     status: 500
@@ -175,7 +175,7 @@ app.post("/api/registerUser", jsonParser, ( req, res, next ) => {
                             });
                     })
                     .catch(err => {
-                        res.statusMessage = "Something went wrong with the DB";
+                        res.statusMessage = "Something went wrong with the DB get";
                         return res.status(500).json({
                             message: "Something went wrong with the DB",
                             status: 500
@@ -199,20 +199,45 @@ app.post("/api/registerUser", jsonParser, ( req, res, next ) => {
 });
 
 app.post("/api/login", jsonParser, (req, res, next) => {
-    let {username, password} = req.body;
+    let { username, password } = req.body
+    if (!username || !password) {
+        res.statusMessage = 'Missing field in body'
+        return res.status('406').json({
+            message: 'Missing field in body',
+            status: 406
+        })
+    }
+    UserList.get(username)
+        .then(user => {
+            if (user) {
+                return bcrypt.compare(password, user.password)
+            } else {
+                res.statusMessage = 'Username not found'
+                return res.status(401).json({
+                    message: 'Username not found',
+                    status: 404
+                })
+            }
+        })
+        .then(match => {
+            if (match) {
+                return res.status(200).json(req.body.username)
+            } else {
+                res.statusMessage = `Passwords doesn't match`
+                return res.status(404).json({
+                    message: `Passwords doesn't match`,
+                    status: 404
+                })
+            }
+        })
+        .catch(error => {
+            res.statusMessage = 'Something went wrong with the db'
+            return res.status(500).json({
+                status: 500,
+                message: 'Something went wrong with the db'
+            })
+        })
 
-    let user = {username, password};
-	UserList.login(user)
-		.then(goodUser => {
-			return res.status( 202 ).json( goodUser );
-		})
-		.catch( error => {
-			res.statusMessage = "Something went wrong with the DB. Try again later.";
-			return res.status( 500 ).json({
-				status : 500,
-				message : "Something went wrong with the DB. Try again later."
-			})
-		});
 });
 
 app.post("/api/postPool", jsonParser, (req, res, next) => {
