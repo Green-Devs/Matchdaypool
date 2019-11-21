@@ -1,3 +1,23 @@
+function checkIfLogged() {
+    console.log(localStorage.getItem("user"));
+    if (localStorage.getItem("user") == null) {
+        localStorage.setItem("user", "guest");
+        return false;
+    }
+    else {
+        if (localStorage.getItem("user") != "guest") {
+            return true;
+        }
+        return false;
+    }
+}
+
+function redirectUser() {
+    if (checkIfLogged()) {
+        window.location.href = './index.html';
+    }
+}
+
 function signup() {
     $(".btn.btn-primary").on("click", (event) => {
         event.preventDefault();
@@ -61,3 +81,4 @@ function examplesForPUTandPOSTMethods() {
 }
 
 signup();
+redirectUser();
