@@ -69,7 +69,7 @@ app.get("/api/getUserPools/:id", jsonParser, ( req, res, next ) => {
         });
 });
 
-app.get("/api/getPool/:id", jsonParser, ( req, res, next ) => {
+app.get("/api/getPoolInfo/:id", jsonParser, ( req, res, next ) => {
     let searchedPool = {
         pool: {},
         matchdays: [],
@@ -182,6 +182,21 @@ app.get("/api/getInvites/:userID", jsonParser, (req, res, next) => {
     InvitesList.get(req.params.userID)
         .then( invites => {
             return res.status ( 200 ).json( invites );
+                
+        })
+        .catch( error => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : res.statusMessage
+            });
+        });
+});
+
+app.get("/api/getPoolTeams", jsonParser, (req, res, next) => {
+    TeamList.getByPool(req.body.id)
+        .then( teams => {
+            return res.status ( 200 ).json( teams );
                 
         })
         .catch( error => {
@@ -356,7 +371,8 @@ app.post("/api/createPool", jsonParser, (req, res, next) => {
                                             let newMatch = {
                                                 teamOne: teamOne._id,
                                                 teamTwoo: teamTwo._id,
-                                                matchday: createdMatchday._id
+                                                matchday: createdMatchday._id,
+                                                pool: createdPool._id
                                             }
                                             MatchList.post(newMatch)
                                                 .then(newMatch => {
@@ -420,6 +436,48 @@ app.post("/api/createInvite", jsonParser, (req, res, next) => {
 				message : res.statusMessage
 			})
 		});
+});
+
+app.post("/api/createMatchday", jsonParser, (req, res, next) => {
+    
+    let newMatchday = {
+        startDate: req.body.startDate,
+        finishDate: req.body.finishDate,
+        pool: req.body.poolID
+    }
+
+    let matches = [];
+    
+    MatchdayList.post(newMatchday)
+        .then(newMatchday => {
+            for (let i = 0; i < req.body.matches.length; i++) {
+                let newMatch = {
+                    teamOne: req.body.matches.teamOne,
+                    teamTwo: req.body.matches.teamTwo,
+                    matchday: newMatchday._id,
+                    pool: newMatchday.pool
+                }
+                MatchList.post(newMatch)
+                    .then(createdMatch => {
+                        matches.push(createdMatch);
+                    })
+                    .catch(err => {
+                        res.statusMessage = "Something went wrong with the DB. Try again later.";
+                        return res.status( 500 ).json({
+                            status : 500,
+                            message : res.statusMessage
+                        })
+                    })
+            }
+            return res.status( 202 ).json( {newMatchday, matches} );
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : res.statusMessage
+            })
+        })
 });
 
 // PUT Methods ----------------------------------------------------------------------------------------------------
@@ -493,7 +551,46 @@ app.put("/api/updatePoolinfo", jsonParser, (req, res, next) => {
     
 });
 
-app.put("/api/updateMatchday", jsonParser, (req, res, next) => {});
+app.put("/api/updateMatchday", jsonParser, (req, res, next) => {
+    let updatedMatchday = {
+        startDate: req.body.startDate,
+        finishDate: req.body.finishDate,
+        pool: req.body.poolID
+    }
+
+    let matches = [];
+    
+    MatchdayList.put(updatedMatchday)
+        .then(updateMatchday => {
+            for (let i = 0; i < req.body.matches.length; i++) {
+                let updatedMatch = {
+                    teamOne: req.body.matches.teamOne,
+                    teamTwo: req.body.matches.teamTwo,
+                    matchday: updateMatchday._id,
+                    pool: updateMatchday.pool
+                }
+                MatchList.post(updatedMatch)
+                    .then(updateMatch => {
+                        matches.push(updateMatch);
+                    })
+                    .catch(err => {
+                        res.statusMessage = "Something went wrong with the DB. Try again later.";
+                        return res.status( 500 ).json({
+                            status : 500,
+                            message : res.statusMessage
+                        })
+                    })
+            }
+            return res.status( 202 ).json( {updateMatchday, matches} );
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : res.statusMessage
+            })
+        })
+});
 
 // DELETE Methods ----------------------------------------------------------------------------------------------------
 
