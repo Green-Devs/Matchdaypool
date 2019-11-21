@@ -1,3 +1,17 @@
+function checkIfLogged() {
+    console.log(localStorage.getItem("user"));
+    if (localStorage.getItem("user") == null) {
+        localStorage.setItem("user", "guest");
+        return false;
+    }
+    else {
+        if (localStorage.getItem("user") != "guest") {
+            return true;
+        }
+        return false;
+    }
+}
+
 function createNavBar() {
     if (checkIfLogged()) {
         $(".navbar-nav").append(`
@@ -21,7 +35,11 @@ function createNavBar() {
             </div>
         </div>`);
     }
+    else {
+        $(".navbar-collapse").append(`<a class="nav-link" href="login.html"><button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Log In / Sign Up</button></a>`);
+    }
 }
+
 
 function signOut() {
     $("#signOut").on("click", (event) => {

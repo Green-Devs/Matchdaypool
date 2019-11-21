@@ -30,3 +30,7 @@ html > body {
     border-radius: 5px;
     border-color: #ced4da;
 }
+
+.redMessages {
+    color: crimson;
+}

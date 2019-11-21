@@ -17,3 +17,7 @@ div > .signOut {
         height: 75px;
     }
 }
+
+.navbar-collapse > .dropdown {
+    margin: 2px 10px;
+}
