@@ -403,6 +403,17 @@ app.put("/api/updateInvite", jsonParser, (req, res, next) => {
 
     InvitesList.put({invitee, pool, status})
         .then(invite => {
+            if (status = "Accepted") {
+                ParticipantsList.post({participant: invitee, pool: pool, coveredCost: false})
+                    .then(participation => {})
+                    .catch( error => {
+                        res.statusMessage = "Something went wrong with the DB. Try again later.";
+                        return res.status( 500 ).json({
+                            status : 500,
+                            message : res.statusMessage
+                        })
+                    });
+            }
 			return res.status( 202 ).json( invite );
 		})
 		.catch( error => {
@@ -428,6 +439,10 @@ app.put("/api/updateUser", jsonParser, (req, res, next) => {
                 message : res.statusMessage
             })
         });
+});
+
+app.put("/api/updatePool", jsonParser, (req, res, next) => {
+
 });
 
 // DELETE Methods ----------------------------------------------------------------------------------------------------

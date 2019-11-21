@@ -80,6 +80,7 @@ let poolSchema = mongoose.Schema ({
     name: {type: String, require: true},
     desc: {type: String, require: true},
     cost: {type: Number, require: true},
+    sport: {type: String,},
     private: {type: Boolean, require: true},
     owner: {type: mongoose.Schema.Types.ObjectId, ref: "User", require: true}
 });
@@ -258,7 +259,9 @@ let matchSchema = mongoose.Schema ({
     teamOne:{type: mongoose.Schema.Types.ObjectId, ref: "Team", require: true},
     teamTwo: {type: mongoose.Schema.Types.ObjectId, ref: "Team", require: true},
     matchday: {type: mongoose.Schema.Types.ObjectId, ref: "Matchday", require: true},
-    pool: {type: mongoose.Schema.Types.ObjectId, ref: "Pool", require: true}
+    pool: {type: mongoose.Schema.Types.ObjectId, ref: "Pool", require: true},
+    winner: {type: mongoose.Schema.Types.ObjectId, ref: "Team"},
+    draw: {type: Boolean}
 });
 
 let Match = mongoose.model('Match', matchSchema);
