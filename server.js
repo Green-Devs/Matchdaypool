@@ -291,7 +291,8 @@ app.post("/api/createPool", jsonParser, (req, res, next) => {
         desc: req.body.desc,
         cost: req.body.cost,
         private: req.body.private,
-        owner: req.body.owner
+        owner: req.body.owner,
+        sport: req.body.sport
     };
 
     let returnPool = {
@@ -441,9 +442,33 @@ app.put("/api/updateUser", jsonParser, (req, res, next) => {
         });
 });
 
-app.put("/api/updatePool", jsonParser, (req, res, next) => {
+app.put("/api/updatePoolinfo", jsonParser, (req, res, next) => {
+    let updatedPool = {
+        name: req.body.name,
+        desc: req.body.desc,
+        cost: req.body.cost,
+        private: req.body.private,
+        owner: req.body.owner,
+        sport: req.body.sport
+    }
 
+    PoolList.update(updatedPool)
+        .then(updatedPool => {
+
+            return res.status( 202 ).json( updatedPool );
+        })
+        .catch( error => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : res.statusMessage
+            })
+        });
+    
+    
 });
+
+app.put("/api/updateMatchday", jsonParser, (req, res, next) => {});
 
 // DELETE Methods ----------------------------------------------------------------------------------------------------
 
