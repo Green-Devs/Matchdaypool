@@ -26,13 +26,13 @@
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active" id="nav-item-home">
+                <li class="nav-item" id="nav-item-home">
                     <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item" id="nav-item-public-pools">
+                <li class="nav-item active" id="nav-item-public-pools">
                     <a class="nav-link" href="publicPools.html">Public Pools</a>
                 </li>
             </ul>
@@ -45,49 +45,28 @@
 
     <!-- Main Content -->
     <div class="mainSection">
-        <ul class="listOfPools">
-            <h2>Pools</h2>
-            <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </ul>
+        <h2>Public Pools</h2>
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
         <div>
-            <div class="card mb-3">
-                <div class="card-body text-white bg-dark">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                        additional content.
-                        This content is a little bit longer.</p>
-                    <p class="card-text"><small class="text-muted">Number of participants: 0</small></p>
-                </div>
-            </div>
-            <div class="card mb-3">
-                <div class="card-body text-white bg-dark">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                        additional content.
-                        This content is a little bit longer.</p>
-                    <p class="card-text"><small class="text-muted">Number of participants: 0</small></p>
-                </div>
-            </div>
-            <div class="card mb-3">
-                <div class="card-body text-white bg-dark">
-                    <h5 class="card-title">Pool name</h5>
-                    <p class="card-text">Description.</p>
-                    <p class="card-text"><small class="text-muted">Number of participants: 0</small></p>
-                </div>
+            <div class="card mb-3 listOfPools">
             </div>
         </div>
-    </div>
 
 
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="./navbar.js"></script>
-    <script src="./src/pools.js"></script>
+        <!-- Scripts -->
+        <script src="https://code.jquery.com/jquery-3.4.1.js"
+            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+        <script src="./navbar.js"></script>
+        <script src="./src/publicPools.js"></script>
 </body>
 
 </html>
