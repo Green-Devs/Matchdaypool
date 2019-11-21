@@ -4,7 +4,7 @@ function signup() {
 
         console.log("signup");
 
-        let url = "/api/postUser";
+        let url = "/api/registerUser";
         let newUser = {
             name: $("#name").val(), 
             lastname: $("#lastname").val(), 

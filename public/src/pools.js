@@ -1,3 +1,5 @@
+document.querySelector("#nav-item-public-pools").classList.add("active");
+
 let owner;
 
 function getPools() {
@@ -35,9 +37,10 @@ function getPools() {
                             <div class="owner">${owner}</div>
                         </div>
                         `);
-                    
                 }
             }
+
+            $(".spinner-border").hide();
             
         },
         error: function(err){

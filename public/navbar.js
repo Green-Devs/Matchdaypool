@@ -12,16 +12,16 @@ function createNavBar() {
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
+            <li class="nav-item" id="nav-item-home">
                 <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" id="nav-item-public-pools">
                 <a class="nav-link" href="publicPools.html">Public Pools</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" id="nav-item-user-pools">
                 <a class="nav-link" href="publicPools.html">My Pools</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" id="nav-item-create-pool">
                 <a class="nav-link" href="createPool.html">Create a pool</a>
             </li>
         </ul>
