@@ -312,6 +312,15 @@ let ParticipantsList = {
                 throw Error(err);
             });
     },
+    getByUser: function (userID) {
+        return Participants.find({participant: userID})
+            .then(participants => {
+                return participants;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
     post: function (newParticipation) {
         return Participants.create(newParticipation)
             .then(participation => {

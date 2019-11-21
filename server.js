@@ -36,9 +36,29 @@ app.get("/api/getPools", jsonParser, ( req, res, next ) => {
 });
 
 app.get("/api/getUserPools/:id", jsonParser, ( req, res, next ) => {
+    let userPools = {
+        ownedPools: [],
+        participatingPools: []
+    }
+
     PoolList.getUserPools(req.params.id)
-        .then( pools => {
-            return res.status( 200 ).json( pools );
+        .then( ownedPools => {
+
+            userPools.ownedPools = ownedPools;
+            
+            ParticipantsList.getByUser(req.params.id)
+                .then( participatingPools => {
+
+                    userPools.participatingPools = participatingPools;
+                    return res.status( 200 ).json( userPools );
+                })
+                .catch( error => {
+                    res.statusMessage = "Something went wrong with the DB. Try again later.";
+                    return res.status( 500 ).json({
+                        status : 500,
+                        message : res.statusMessage
+                    })
+                });
         })
         .catch( error => {
             res.statusMessage = "Something went wrong with the DB. Try again later.";
@@ -72,6 +92,7 @@ app.get("/api/getPools/:id", jsonParser, ( req, res, next ) => {
 });
 
 app.get("/api/getUser/:id", jsonParser, (req, res, next) => {
+
     UserList.getById(req.params.id)
         .then( user => {
             return res.status ( 200 ).json( user );
