@@ -26,6 +26,7 @@ function fetchPublicPools() {
                                 <h5 class="card-title">${responseJSON[i].name}</h5>
                                 <p class="card-text miniText"><small>Sport: ${responseJSON[i].sport} Cost: $${responseJSON[i].cost}</small></p><hr>
                                 <p class="card-text">${responseJSON[i].desc}</p>
+                                <button type="submit" class="btn btn-primary" id="${responseJSON[i]._id}">Go to pool</button>
                                 <p class="card-text"><small class="text-muted">Owner: ${owner}</small></p>
                                 </div>
                     </div>`);
@@ -50,4 +51,14 @@ function fetchPublicPools() {
     $.ajax(settings);
 }
 
+function checkIfClicked() {
+    $(".listOfPools").on("click", "button", (event) => {
+        event.preventDefault();
+        localStorage.setItem("poolID", event.target.id);
+        window.location.href = './pool.html';
+    });
+
+}
+
 fetchPublicPools();
+checkIfClicked();

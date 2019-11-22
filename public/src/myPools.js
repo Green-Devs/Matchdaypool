@@ -31,6 +31,7 @@ function fetchPools() {
                                 <h5 class="card-title">${pools.ownedPools[i].name}</h5>
                                 <p class="card-text miniText"><small>Sport: ${pools.ownedPools[i].sport} Cost: $${pools.ownedPools[i].cost}</small></p><hr>
                                 <p class="card-text">${pools.ownedPools[i].desc}</p>
+                                <button type="submit" class="btn btn-primary" id="${pools.ownedPools[i]._id}">Go to pool</button>
                                 <p class="card-text"><small class="text-muted">Owner: YOU</small></p>
                                 </div>
                     </div>`);
@@ -53,6 +54,7 @@ function fetchPools() {
                                 <h5 class="card-title">${pools.participatingPools[i].name}</h5>
                                 <p class="card-text miniText"><small>Sport: ${pools.participatingPools[i].sport} Cost: $${pools.participatingPools[i].cost}</small></p><hr>
                                 <p class="card-text">${pools.participatingPools[i].desc}</p>
+                                <button type="submit" class="btn btn-primary" id="${pools.participatingPools[i]._id}">Go to pool</button>
                                 <p class="card-text"><small class="text-muted">Owner: ${user.username}</small></p>
                                 </div>
                     </div>`);
@@ -84,5 +86,19 @@ function fetchPools() {
     $.ajax(settings);
 }
 
+function watchPools() {
+    $(".ownedPools").on("click", "button", (event) => {
+        event.preventDefault();
+        localStorage.setItem("poolID", event.target.id);
+        window.location.href = './pool.html';
+    });
+    $(".otherPools").on("click", "button", (event) => {
+        event.preventDefault();
+        localStorage.setItem("poolID", event.target.id);
+        window.location.href = './pool.html';
+    });
+}
+
 redirectUser();
 fetchPools();
+watchPools();
