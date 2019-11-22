@@ -128,7 +128,7 @@ let PoolList = {
             });
     },
     update: function(pool) {
-        return Pool.findOneAndUpdate({ id:pool.id }, { $set:{pool} })
+        return Pool.updateOne({ _id:pool.id }, pool)
             .then(pool => {
                 return pool;
             })
