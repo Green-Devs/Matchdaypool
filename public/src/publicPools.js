@@ -14,11 +14,20 @@ function fetchPublicPools() {
                     let id = responseJSON[i].owner;
 
                     let getSettings = {
-                        url: "/api/getUsers/" + id,
+                        url: "/api/getUser/" + id,
                         method: "GET",
                         dataType: "JSON",
-                        success: function (responseJSON) {
-                            owner = responseJSON.name;
+                        success: function (user) {
+                            owner = user.username;
+                            $(".listOfPools").append(`
+                            <div class="card mb-3">
+                                <div class="card-body text-white bg-dark">
+                                <h5 class="card-title">${responseJSON[i].name}</h5>
+                                <p class="card-text miniText"><small>Sport: ${responseJSON[i].sport} Cost: $${responseJSON[i].cost}</small></p>
+                                <p class="card-text">${responseJSON[i].desc}</p>
+                                <p class="card-text"><small class="text-muted">Owner: ${owner}</small></p>
+                                </div>
+                    </div>`);
                         },
                         error: function (err) {
                             console.log("err", err);
@@ -26,16 +35,6 @@ function fetchPublicPools() {
                     }
 
                     $.ajax(getSettings);
-
-                    $(".listOfPools").append(`
-                    <div class="card mb-3">
-                        <div class="card-body text-white bg-dark">
-                            <h5 class="card-title">${responseJSON[i].name}</h5>
-                            <p class="card-text miniText"><small>Sport: ${responseJSON[i].sport} Cost: $${responseJSON[i].cost}</small></p>
-                            <p class="card-text">${responseJSON[i].desc}</p>
-                            <p class="card-text"><small class="text-muted">Owner: ${owner}</small></p>
-                        </div>
-                    </div>`);
                 }
             }
 
