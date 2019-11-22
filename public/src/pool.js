@@ -43,6 +43,7 @@ function fetchPoolInfo() {
         method: "GET",
         dataType: "JSON",
         success: function (poolInfo) {
+            console.log(poolInfo);
             checkIfOwner(poolInfo[0].owner);
             if (!poolInfo[0].private)
                 $('.genInfo').append(`<button type ="submit" class="btn btn-success" id="joinBtn">Join the Pool</button>`);
