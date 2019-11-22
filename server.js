@@ -24,22 +24,6 @@ app.use((req, res, next) => {
 app.get("/api/getPools", jsonParser, ( req, res, next ) => {
     PoolList.get()
         .then( pools => {
-            for (let i = 0; i < pools.length; i++) {
-                UserList.getById(pools[i].owner)
-                    .then( User => { 
-                        console.log(User);
-                        console.log(pools);
-                        pools[i].ownerName = User.name;
-                        return;
-                    })
-                    .catch( error => {
-                        res.statusMessage = "Something went wrong with the DB. Try again later.";
-                        return res.status( 500 ).json({
-                            status : 500,
-                            message : res.statusMessage
-                        })
-                    });
-            }
             return res.status( 200 ).json( pools );
         })
         .catch( error => {
