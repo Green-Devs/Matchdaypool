@@ -137,7 +137,7 @@ let PoolList = {
             });
     },
     delete: function (poolID) {
-        return Pool.findByIdAndDelete({ id: poolID })
+        return Pool.deleteOne({ _id: poolID })
             .then(pool => {
                 return pool;
             })
@@ -314,6 +314,15 @@ let MatchList = {
     },
     delete: function(matchdayID) {
         return Match.deleteMany({matchday: matchdayID})
+            .then(matches => {
+                return matches;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    deleteByPool:function(poolID) {
+        return Match.deleteMany({pool: poolID})
             .then(matches => {
                 return matches;
             })
