@@ -142,9 +142,8 @@ app.get("/api/getUsers", jsonParser, (req, res, next) => {
         })
 });
 
-app.get("/api/getMatches", jsonParser, (req, res, next) => {
-    
-    MatchList.get(req.body.matchdayID)
+app.get("/api/getMatches/:matchdayID", jsonParser, (req, res, next) => {
+    MatchList.get(req.params.matchdayID)
         .then( matches => {
             return res.status ( 200 ).json( matches );
         })
@@ -441,6 +440,7 @@ app.post("/api/createMatch", jsonParser, (req, res, next) => {
         matchday: req.body.matchday,
         pool: req.body.pool
     }
+    console.log(newMatch);
     MatchList.post(newMatch)
         .then(createdMatch => {
             return res.status( 202 ).json( createdMatch );
@@ -449,7 +449,8 @@ app.post("/api/createMatch", jsonParser, (req, res, next) => {
             res.statusMessage = "Something went wrong with the DB. Try again later.";
             return res.status( 500 ).json({
                 status : 500,
-                message : res.statusMessage
+                message : res.statusMessage,
+                error: err
             })
         })
 });

@@ -198,8 +198,8 @@ let TeamList = {
 // Matchday model ---------------------------------------------------------------------------------------------------------------------
 
 let matchdaySchema = mongoose.Schema ({
-    startDate: {type: Date, require: true},
-    finishDate: {type: Date, require: true},
+    startDate: {type: String, require: true},
+    finishDate: {type: String, require: true},
     pool: {type: mongoose.Schema.Types.ObjectId, ref: "Pool", require: true}
 });
 
