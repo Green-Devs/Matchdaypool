@@ -11,8 +11,20 @@ function signup() {
         console.log("signup");
 
         if ($("#name").val() && $("#lastname").val() && $("#username").val() && $("#email").val() && $("#password").val() && $("#dob").val()) {
+
+            document.querySelector("#redName").hidden = true;
+            document.querySelector("#redLastname").hidden = true;
+            document.querySelector("#redUsername").hidden = true;
+            document.querySelector("#redBirthday").hidden = true;
+            document.querySelector("#redEmail").hidden = true;
+            document.querySelector("#redPassword").hidden = true;
+            document.querySelector("#redConfPassword").hidden = true;
+                
             
             if ($("#password").val() == $("#confPassword").val()) {
+
+                document.querySelector("#redPassword").hidden = true;
+
                 let url = "/api/registerUser";
                 let newUser = {
                     name: $("#name").val(), 
@@ -41,6 +53,8 @@ function signup() {
                 $.ajax(settings);
             } else {
                 // show that passwords dont match
+                document.querySelector("#redPassword").innerHTML = "<b>Your passwords don't match</b>";
+                document.querySelector("#redPassword").hidden = false;
             }
             
         } else {
@@ -77,6 +91,7 @@ function signup() {
             }
 
             if (!$("#password").val()) {
+                document.querySelector("#redPassword").innerHTML = "<b>Please enter your password</b>";
                 document.querySelector("#redPassword").hidden = false;
             } else {
                 document.querySelector("#redPassword").hidden = true;
