@@ -84,7 +84,21 @@ app.get("/api/getPoolInfo/:id", jsonParser, ( req, res, next ) => {
 });
 
 app.get("/api/getMatchdays", jsonParser, (req, res, next) => {
-    MatchdayList.get(req.body.poolID)
+    MatchdayList.get()
+        .then( matchdays => {
+            return res.status( 200 ).json( matchdays );
+        })
+        .catch( error => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+                return res.status( 500 ).json({
+                    status : 500,
+                    message : res.statusMessage
+                })
+        });
+});
+
+app.get("/api/getPoolMatchdays/:id", jsonParser, (req, res, next) => {
+    MatchdayList.getByPool(req.params.id)
         .then( matchdays => {
             return res.status( 200 ).json( matchdays );
         })
@@ -391,7 +405,7 @@ app.post("/api/createMatchday", jsonParser, (req, res, next) => {
     let newMatchday = {
         startDate: req.body.startDate,
         finishDate: req.body.finishDate,
-        pool: req.body.poolID
+        pool: req.body.pool
     }
     
     MatchdayList.post(newMatchday)
