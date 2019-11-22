@@ -30,7 +30,7 @@ function createNavBar() {
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" href="#"><img src="assets/account.png"> Profile</a>
                     <a class="dropdown-item" href="#"><img src="assets/edit.png"> Edit information</a>
-                    <a class="dropdown-item" href="#"><img src="assets/invitations.png"> Invitations</a>
+                    <a class="dropdown-item" href="./invites.html"><img src="assets/invitations.png"> Invitations</a>
                     <a class="dropdown-item" id="signOut" href="#"><img src="assets/Redsignout.png"> Sign out</a>
             </div>
         </div>`);

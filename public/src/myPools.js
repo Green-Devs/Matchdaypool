@@ -44,14 +44,14 @@ function fetchPools() {
                             url: "/api/getPoolInfo/" + pools.participatingPools[i].pool,
                             method: "GET",
                             dataType: "JSON",
-                            success: function (user) {
+                            success: function (pool) {
                                 $(".otherPools").append(`
                                     <div class="card mb-3">
                                         <div class="card-body text-white bg-dark">
-                                            <h5 class="card-title">${pools.participatingPools[i].name}</h5>
-                                            <p class="card-text miniText"><small>Sport: ${pools.participatingPools[i].sport} Cost: $${pools.participatingPools[i].cost}</small></p><hr>
-                                            <p class="card-text">${pools.participatingPools[i].desc}</p>
-                                            <p class="card-text"><small class="text-muted">Owner: ${user.username}</small></p>
+                                            <h5 class="card-title">${pool.name}</h5>
+                                            <p class="card-text miniText"><small>Sport: ${pool.sport} Cost: $${pool.cost}</small></p><hr>
+                                            <p class="card-text">${pool.desc}</p>
+                                            <p class="card-text"><small class="text-muted">Owner: ${pool.owner}</small></p>
                                         </div>
                                     </div>`);
                             },
@@ -68,11 +68,10 @@ function fetchPools() {
 
             $.ajax(getPools);
             
-            
             $(".spinner-border").hide();
 
         },
-        error: function (err) {
+        error: function(err) {
             console.log("err", err);
         }
     };

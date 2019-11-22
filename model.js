@@ -402,7 +402,7 @@ let Invites = mongoose.model('Invites', invitesSchema);
 
 let InvitesList = {
     get: function(inviteeID) {
-        return Invites.find({invitee: inviteeID})
+        return Invites.find({invitee: inviteeID, status: "Pending"})
             .then(invites => {
                 return invites;
             })
@@ -420,7 +420,7 @@ let InvitesList = {
             });
     },
     put : function(updatedInvite) {
-        return Invites.updateOne({_id: updatedInvite.id}, updatedInvite)
+        return Invites.updateOne({invitee: updatedInvite.invitee, pool: updatedInvite.pool}, updatedInvite)
             .then(invite => {
                 return invite;
             })
