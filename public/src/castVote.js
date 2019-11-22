@@ -135,6 +135,7 @@ function watchButton() {
                                                     contentType: "application/json", // type of sent data in the request
                                                     success: function (createdVote) {
                                                         console.log("success", createdVote);
+                                                        window.location.href = './pool.html';
                                                       //  window.location.href = './index.html';
                                                     },
                                                     error: function (err) {
