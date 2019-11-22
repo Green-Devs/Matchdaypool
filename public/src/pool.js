@@ -28,19 +28,6 @@ function checkIfOwner(ownerID) {
     });
 }
 
-function checkIfUserIsParticipating(isUserParticipating, isPrivate) {
-    console.log(isUserParticipating);
-    if (isUserParticipating) {
-        $('.genInfo').append(`<button type ="submit" class="btn btn-success" id="voteBtn"> Vote in the current Mathday</button>`)
-    }
-    else {
-        if (!isPrivate) {
-            $('.genInfo').append(`<button type ="submit" class="btn btn-success" id="joinBtn">Join the Pool</button>`)
-        }
-    }
-
-}
-
 function fetchPoolInfo() {
     console.log(id);
     $.ajax({
@@ -48,9 +35,11 @@ function fetchPoolInfo() {
         method: "GET",
         dataType: "JSON",
         success: function (poolInfo) {
-            checkIfOwner(poolInfo[0].owner)
+            checkIfOwner(poolInfo[0].owner);
+            if (!poolInfo[0].private)
+                $('.genInfo').append(`<button type ="submit" class="btn btn-success" id="joinBtn">Join the Pool</button>`);
             $('#poolTitle').append(`${poolInfo[0].name}`);
-            $('.genInfo').append(`<p>${poolInfo[0].desc}</p><p>Sport: ${poolInfo[0].sport}</p><p>Cost: $${poolInfo[0].cost}</p>`)
+            $('.textInfo').append(`<p>${poolInfo[0].desc}</p><p>Sport: ${poolInfo[0].sport}</p><p>Cost: $${poolInfo[0].cost}</p>`)
             $.ajax({
                 url: "/api/getPoolTeams/" + poolInfo[0]._id,
                 method: "GET",
@@ -77,7 +66,8 @@ function fetchPoolInfo() {
                             dataType: "JSON",
                             success: function (participant) {
                                 if (participant.username == localStorage.getItem("user")) {
-                                    isUserParticipating = true;
+                                    $('.genInfo').append(`<button type ="submit" class="btn btn-success" id="voteBtn"> Vote in the current Mathday</button>`);
+                                    $('#joinBtn').remove();
                                 }
                                 $('.usersInThePool').append(`<li>${participant.username}</li>`);
                                 checkIfUserIsParticipating(isUserParticipating, poolInfo[0].private);
@@ -151,7 +141,7 @@ function checkButtons() {
             }
         });
     });
-    $(".genInfo").on("click", "#deleteBtn", (event) => {
+    $(".topPart").on("click", "#deleteBtn", (event) => {
         event.preventDefault();
         $.ajax({
             url: "/api/deletePool/" + localStorage.getItem("poolID"),
