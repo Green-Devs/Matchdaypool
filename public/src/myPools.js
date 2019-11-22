@@ -58,6 +58,7 @@ function fetchPools() {
                             error: function (err) {
                                 console.log("err", err);
                             }
+                        });
                     }
                 },
                 error: function (err) {
