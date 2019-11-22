@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="./../css/style.css" rel="stylesheet">
+    </head>
+    <body>
+        <h1>Create pool</h1>
+
+        <div>
+            <label for="name"> Pool Name </label>
+            <input type="text" id="name" />
+        </div>
+        
+        <div>
+            <label for="desc"> Description </label>
+            <textarea id="desc"></textarea>
+        </div>
+
+        <div>
+            <label for="email"> Email </label>
+            <input type="text" id="email" />
+        </div>
+
+        <div>
+            <label for="password"> Password </label>
+            <input type="password" id="password" />
+        </div>
+        
+        <button id="createPool">Create Pool</button>
+
+        <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="./../src/createPool.js"></script>
+    </body>
+</html>

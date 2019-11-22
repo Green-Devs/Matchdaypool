@@ -1,0 +1,23 @@
+.mainSection {
+    background-color: #13326E;
+    height: 100%;
+}
+
+html > body {
+    background-color: #13326E;
+}
+
+div > .signOut {
+    color: crimson;
+}
+
+@media (min-width: 768px) {
+    .banner {
+        background-image: url("https://image.freepik.com/free-vector/seamless-pattern-sport-objects_1335-614.jpg");
+        height: 75px;
+    }
+}
+
+.navbar-collapse > .dropdown {
+    margin: 2px 10px;
+}
