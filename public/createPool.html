@@ -64,8 +64,8 @@
                     placeholder="$">
             </div>
             <div class="form-group col-md-6">
-                <label for="inputState"><b>Sport</b></label>
-                <select id="inputState" class="form-control">
+                <label for="sport"><b>Sport</b></label>
+                <select id="sport" class="form-control">
                     <option selected>Choose...</option>
                     <option>Baseball</option>
                     <option>Basketball</option>
@@ -85,11 +85,24 @@
             </div>
             </div>
             <div class="form-group">
-                <label for="private"><b>Private</b></label>
-                <input type="checkbox"  id="private">
-                <small id="emailHelp" class="form-text text-muted">Check if you don't want your pool to be shared publicly in the page.</small>
+                <label for="team"><b>Add a team to the pool</b></label>
+                <input type="text" class="form-control" id="team" aria-describedby="emailHelp"
+                    placeholder="Type in the name of the team"></input>
             </div>
-            <button type="submit" class="btn btn-primary">Create pool</button>
+            <button type="submit" class="btn btn-success" id="teamBtn">Add team</button>
+            <div class="form-group">
+                <label for="teamsInThePool"><b>Teams</b></label>
+                <select multiple class="form-control" id="teamsInThePool">
+                </select>
+                <button type="submit" class="btn btn-danger" id="deleteBtn">Delete team</button>
+            </div>
+            
+            <div class="form-group">
+                <label for="private"><b>Private</b></label>
+                <input type="checkbox" id="private">
+                <small id="privateHelp" class="form-text text-muted">Check if you don't want your pool to be shared publicly in the page.</small>
+            </div>
+            <button type="submit" class="btn btn-primary" id="submitBtn">Create pool</button>
         </form>
     </div>
 
