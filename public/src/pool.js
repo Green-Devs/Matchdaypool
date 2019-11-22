@@ -201,6 +201,24 @@ function checkButtons() {
         event.preventDefault();
         window.location.href = './createMatchday.html';
     });
+    $(".topPart").on("click", "#deleteBtn", (event) => {
+        event.preventDefault();
+        $.ajax({
+            url: "/api/deletePool/" + localStorage.getItem("poolID"),
+            method: "DELETE",
+            contentType: "JSON",
+            success: function (deleted) {
+                window.location.href = './index.html';
+            },
+            error: function (err) {
+                console.log("err", err);
+            }
+        });
+    });
+    $(".genInfo").on("click", "#voteBtn", (event) => {
+        event.preventDefault();
+        window.location.href = './castVote.html';
+    });
 }
 
 redirectUser();
