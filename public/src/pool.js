@@ -78,12 +78,11 @@ function fetchPoolInfo() {
                                     $('#joinBtn').remove();
                                 }
                                 $('.usersInThePool').append(`<li>${participant.username}</li>`);
-                                checkIfUserIsParticipating(isUserParticipating, poolInfo[0].private);
                             },
                             error: function (err) {
                                 console.log("err", err);
                             }
-                        });  
+                        });
                     }
                 },
                 error: function (err) {
@@ -96,7 +95,41 @@ function fetchPoolInfo() {
                 dataType: "JSON",
                 success: function (matchDays) {
                     for (let i = 0; i < matchDays.length; i++) {
-                        $('.poolMatchays').append(`<li>Matchday ${i + 1}: ${matchDays[i].startDate}-${matchDays[i].endDate}</li>`);
+                        $('.poolMatchays').append(`<li>Matchday ${i + 1}: ${matchDays[i].startDate}-${matchDays[i].finishDate}<ul id="matchday${i + 1}"></ul></li>`);
+                        $.ajax({
+                            url: "/api/getMatches/" + matchDays[i]._id,
+                            method: "GET",
+                            dataType: "JSON",
+                            success: function (matches) {
+                                console.log("DEBEN SEGUIR MATCHES");
+                                console.log(matches);
+                                for (let j = 0; j < matches.length; j++) {
+                                    $.ajax({
+                                        url: "/api/getPoolTeams/" + poolInfo[0]._id,
+                                        method: "GET",
+                                        dataType: "JSON",
+                                        success: function (teams) {
+                                            let first, second
+                                            for (let i = 0; i < teams.length; i++) {
+                                                if (teams[i]._id == matches[j].teamOne) {
+                                                    first = teams[i].name;
+                                                }
+                                                if (teams[i]._id == matches[j].teamTwo) {
+                                                    second = teams[i].name;
+                                                }
+                                            }
+                                            $(`#matchday${i + 1}`).append(`<li>${first} - ${second}</li>`);
+                                        },
+                                        error: function (err) {
+                                            console.log("err", err);
+                                        }
+                                    });
+                                }
+                            },
+                            error: function (err) {
+                                console.log("err", err);
+                            }
+                        });
                     }
                 },
                 error: function (err) {
@@ -162,6 +195,10 @@ function checkButtons() {
                 console.log("err", err);
             }
         });
+    });
+    $(".topPart").on("click", "#addBtn", (event) => {
+        event.preventDefault();
+        window.location.href = './createMatchday.html';
     });
 }
 

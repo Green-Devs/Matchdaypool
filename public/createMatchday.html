@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Matchday Pool - Create a Matchday</title>
+    <link rel="shortcut icon" type="image/png" href="https://i.imgur.com/U7a9HzK.png" />
+    <link href="./css/createMatchday.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+    <!-- Banner -->
+    <div class="banner"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">
+            <img src="https://i.imgur.com/U7a9HzK.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            MatchdayPool
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item" id="nav-item-home">
+                    <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item" id="nav-item-public-pools">
+                    <a class="nav-link" href="publicPools.html">Public Pools</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search for a pool" aria-label="Search">
+                <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <h2>Create a Matchday</h2>
+    <div class="createForm">
+        <form>
+            <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="start"><b>Start Day</b></label>
+                <input type="date" class="form-control" id="start" aria-describedby="startDay">
+                <label class="redMessages" id="redStart"></label>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="finish"><b>Finish Day</b></label>
+                <input type="date" class="form-control" id="finish" aria-describedby="finishDay">
+                <label class="redMessages" id="redFinish"></label>
+            </div>
+            </div>
+            <label for="teams"><b>Choose the 2 teams for the match</b></label>
+            <div class="form-row">
+                
+                <div class="form-group col-md-6">
+                    <label for="team1"><b>Team 1</b></label>
+                    <select id="team1" class="form-control">
+                        <option selected>Choose...</option>
+                        </select>
+                    <label class="redMessages" id="redTeam1"></label>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="team2"><b>Team 2</b></label>
+                    <select id="team2" class="form-control">
+                        <option selected>Choose...</option>
+                    </select>
+                    <label class="redMessages" id="redTeam2"></label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success" id="matchBtn">Create the match</button>
+            <label class="redMessages" id="redTeam"></label>
+            <div class="form-group">
+                <label for="teamsInTheMatch"><b>Matches</b></label>
+                <select multiple class="form-control" id="teamsInTheMatch">
+                </select>
+                <button type="submit" class="btn btn-danger" id="deleteBtn">Delete match</button>
+            </div>
+            <button type="submit" class="btn btn-primary" id="submitBtn">Create Matchday</button>
+        </form>
+    </div>
+
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="./navbar.js"></script>
+    <script src="./src/createMatchday.js"></script>
+
+</body>
+
+</html>
