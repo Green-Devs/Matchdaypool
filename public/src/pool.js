@@ -1,5 +1,6 @@
 let owner = localStorage.getItem("ownerUsername");
 let id = localStorage.getItem("poolID");
+let isUserParticipating = false;
 
 function redirectUser() {
     if (!checkIfLogged()) {
@@ -14,7 +15,7 @@ function checkIfOwner(ownerID) {
         dataType: "JSON",
         success: function (poolOwner) {
             if (poolOwner.username == localStorage.getItem("user")) {
-                $(".topPart").append(`<button type="submit" class="btn btn-primary id="editBtn"}">Edit Pool</button><button type="submit" class="btn btn-warning id="sendBtn"}">Send invitations</button><button type="submit" class="btn btn-success id="addBtn"}">Add a Matchday</button><button type="submit" class="btn btn-danger id="deleteBtn"}">Delete Pool</button>`)
+                $(".topPart").append(`<button type="submit" class="btn btn-primary" id="editBtn">Edit Pool</button><button type="submit" class="btn btn-warning" id="sendBtn">Send invitations</button><button type="submit" class="btn btn-success" id="addBtn">Add a Matchday</button><button type="submit" class="btn btn-danger" id="deleteBtn">Delete Pool</button>`)
             }
             else {
                 $(".topPart").remove();
@@ -27,16 +28,29 @@ function checkIfOwner(ownerID) {
     });
 }
 
+function checkIfUserIsParticipating(isUserParticipating, isPrivate) {
+    console.log(isUserParticipating);
+    if (isUserParticipating) {
+        $('.genInfo').append(`<button type ="submit" class="btn btn-success" id="voteBtn"> Vote in the current Mathday</button>`)
+    }
+    else {
+        if (!isPrivate) {
+            $('.genInfo').append(`<button type ="submit" class="btn btn-success" id="joinBtn">Join the Pool</button>`)
+        }
+    }
+
+}
+
 function fetchPoolInfo() {
     console.log(id);
     $.ajax({
         url: "/api/getPoolInfo/" + id,
         method: "GET",
-        dataType: "JSON", 
+        dataType: "JSON",
         success: function (poolInfo) {
             checkIfOwner(poolInfo[0].owner)
-            console.log(poolInfo);
             $('#poolTitle').append(`${poolInfo[0].name}`);
+            $('.genInfo').append(`<p>${poolInfo[0].desc}</p><p>Sport: ${poolInfo[0].sport}</p><p>Cost: $${poolInfo[0].cost}</p>`)
             $.ajax({
                 url: "/api/getPoolTeams/" + poolInfo[0]._id,
                 method: "GET",
@@ -55,8 +69,23 @@ function fetchPoolInfo() {
                 method: "GET",
                 dataType: "JSON",
                 success: function (users) {
+                    console.log(users);
                     for (let i = 0; i < users.length; i++) {
-                        $('.usersInThePool').append(`<li>${users[i].username}</li>`);
+                        $.ajax({
+                            url: "/api/getUser/" + users[i].participant,
+                            method: "GET",
+                            dataType: "JSON",
+                            success: function (participant) {
+                                if (participant.username == localStorage.getItem("user")) {
+                                    isUserParticipating = true;
+                                }
+                                $('.usersInThePool').append(`<li>${participant.username}</li>`);
+                                checkIfUserIsParticipating(isUserParticipating, poolInfo[0].private);
+                            },
+                            error: function (err) {
+                                console.log("err", err);
+                            }
+                        });  
                     }
                 },
                 error: function (err) {
@@ -83,5 +112,47 @@ function fetchPoolInfo() {
     });
 }
 
+function checkButtons() {
+    $(".genInfo").on("click", "#joinBtn", (event) => {
+        event.preventDefault();
+        $.ajax({
+            url: "/api/getUsers/",
+            method: "GET",
+            dataType: "JSON",
+            success: function (users) {
+                for (let i = 0; i < users.length; i++) {
+                    if (users[i].username == localStorage.getItem("user")) {
+                        let userToAdd = {
+                            participant: users[i]._id,
+                            pool: localStorage.getItem("poolID"),
+                            coveredCost: true
+                        }
+                        console.log(userToAdd);
+                        $.ajax({
+                            url: "/api/addParticipant",
+                            method: "POST",
+                            data: JSON.stringify(userToAdd), // info sent to the API
+                            dataType: "JSON", // returned type of the response
+                            contentType: "application/json", // type of sent data in the request
+                            success: function (newParticipant) {
+                                console.log("success", newParticipant);
+                                window.location.href = './pool.html';
+                            },
+                            error: function (err) {
+                                console.log("err", err);
+                            }
+                        });
+                    }
+                }
+
+            },
+            error: function (err) {
+                console.log("err", err);
+            }
+        });
+    });
+}
+
 redirectUser();
 fetchPoolInfo();
+checkButtons();
