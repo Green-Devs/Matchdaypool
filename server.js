@@ -126,7 +126,7 @@ app.get("/api/getUser/:id", jsonParser, (req, res, next) => {
         });
 })
 
-app.get("/api/Users", jsonParser, (req, res, next) => {
+app.get("/api/getUsers", jsonParser, (req, res, next) => {
     UserList.get()
         .then(users => {
             return res.status(201).json(users);
