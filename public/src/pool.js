@@ -20,6 +20,10 @@ function checkIfOwner(ownerID) {
                     event.preventDefault();
                     window.location.href = './editPool.html';
                 });
+                $("#sendBtn").on("click", (event) => {
+                    event.preventDefault();
+                    window.location.href = './sendInvite.html';
+                });
             }
             else {
                 $(".topPart").remove();
