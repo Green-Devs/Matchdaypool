@@ -58,8 +58,6 @@ function fetchPools() {
                             error: function (err) {
                                 console.log("err", err);
                             }
-                        });
-
                     }
                 },
                 error: function (err) {
@@ -81,5 +79,19 @@ function fetchPools() {
     $.ajax(settings);
 }
 
+function watchPools() {
+    $(".ownedPools").on("click", "button", (event) => {
+        event.preventDefault();
+        localStorage.setItem("poolID", event.target.id);
+        window.location.href = './pool.html';
+    });
+    $(".otherPools").on("click", "button", (event) => {
+        event.preventDefault();
+        localStorage.setItem("poolID", event.target.id);
+        window.location.href = './pool.html';
+    });
+}
+
 redirectUser();
 fetchPools();
+watchPools();
