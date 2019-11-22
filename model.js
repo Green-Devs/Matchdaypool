@@ -419,6 +419,15 @@ let InvitesList = {
                 throw Error(err);
             });
     },
+    postMany : function(newInvites) {
+        return Invites.insertMany(newInvites)
+            .then(invites => {
+                return invites;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
     put : function(updatedInvite) {
         return Invites.updateOne({invitee: updatedInvite.invitee, pool: updatedInvite.pool}, updatedInvite)
             .then(invite => {

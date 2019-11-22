@@ -218,6 +218,21 @@ app.get("/api/getMatchVotes/:id", jsonParser, (req, res, next) => {
         });
 });
 
+app.get("/api/findUser/:username", jsonParser, (req, res, next) => {
+    UserList.get(req.params.username)
+        .then( user => {
+            return res.status ( 200 ).json( user );
+                
+        })
+        .catch( error => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : res.statusMessage
+            });
+        });
+});
+
 // POST Methods ----------------------------------------------------------------------------------------------------
 
 app.post("/api/registerUser", jsonParser, ( req, res, next ) => {
@@ -396,12 +411,10 @@ app.post("/api/createPool", jsonParser, (req, res, next) => {
         });
 });
 
-app.post("/api/createInvite", jsonParser, (req, res, next) => {
-    let {invitee, pool, status} = req.body;
-
-    InvitesList.post({invitee, pool, status})
-        .then(invite => {
-			return res.status( 202 ).json( invite );
+app.post("/api/createInvites", jsonParser, (req, res, next) => {
+    InvitesList.postMany(req.body)
+        .then(invites => {
+			return res.status( 202 ).json( invites );
 		})
 		.catch( error => {
 			res.statusMessage = "Something went wrong with the DB. Try again later.";
