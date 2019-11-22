@@ -29,6 +29,7 @@ function fetchPools() {
                                     <h5 class="card-title">${pools.ownedPools[i].name}</h5>
                                     <p class="card-text miniText"><small>Sport: ${pools.ownedPools[i].sport} Cost: $${pools.ownedPools[i].cost}</small></p><hr>
                                     <p class="card-text">${pools.ownedPools[i].desc}</p>
+                                    <button type="submit" class="btn btn-primary" id="${pools.ownedPools[i]._id}">Go to pool</button>
                                     <p class="card-text"><small class="text-muted">Owner: YOU</small></p>
                                 </div>
                             </div>`);
@@ -39,21 +40,33 @@ function fetchPools() {
                     if (pools.participatingPools.length == 0) {
                         $(".otherPools").append(`<h4>You are not currently participating in any pool</h4>`)
                     }
+                    console.log(pools.participatingPools);
                     for (let i = 0; i < pools.participatingPools.length; i++) {
                         $.ajax({
                             url: "/api/getPoolInfo/" + pools.participatingPools[i].pool,
                             method: "GET",
                             dataType: "JSON",
                             success: function (pool) {
-                                $(".otherPools").append(`
+                                $.ajax({
+                                    url: "/api/getUser/" + pool[0].owner,
+                                    method: "GET",
+                                    dataType: "JSON",
+                                    success: function (user) {
+                                        $(".otherPools").append(`
                                     <div class="card mb-3">
                                         <div class="card-body text-white bg-dark">
-                                            <h5 class="card-title">${pool.name}</h5>
-                                            <p class="card-text miniText"><small>Sport: ${pool.sport} Cost: $${pool.cost}</small></p><hr>
-                                            <p class="card-text">${pool.desc}</p>
-                                            <p class="card-text"><small class="text-muted">Owner: ${pool.owner}</small></p>
+                                            <h5 class="card-title">${pool[0].name}</h5>
+                                            <p class="card-text miniText"><small>Sport: ${pool[0].sport} Cost: $${pool[0].cost}</small></p><hr>
+                                            <p class="card-text">${pool[0].desc}</p>
+                                            <button type="submit" class="btn btn-primary" id="${pools.participatingPools[i]._id}">Go to pool</button>
+                                            <p class="card-text"><small class="text-muted">Owner: ${user.username}</small></p>
                                         </div>
                                     </div>`);
+                                    },
+                                    error: function (err) {
+                                        console.log("err", err);
+                                    }
+                                })
                             },
                             error: function (err) {
                                 console.log("err", err);
@@ -67,11 +80,11 @@ function fetchPools() {
             }
 
             $.ajax(getPools);
-            
+
             $(".spinner-border").hide();
 
         },
-        error: function(err) {
+        error: function (err) {
             console.log("err", err);
         }
     };

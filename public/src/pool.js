@@ -151,6 +151,20 @@ function checkButtons() {
             }
         });
     });
+    $(".genInfo").on("click", "#deleteBtn", (event) => {
+        event.preventDefault();
+        $.ajax({
+            url: "/api/deletePool/" + localStorage.getItem("poolID"),
+            method: "DELETE",
+            contentType: "JSON",
+            success: function (deleted) {
+                window.location.href = './index.html';
+            },
+            error: function (err) {
+                console.log("err", err);
+            }
+        });
+    });
 }
 
 redirectUser();
