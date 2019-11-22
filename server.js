@@ -649,6 +649,25 @@ app.post("/api/updateVote", jsonParser, (req, res, next) => {
         })
 });
 
+app.post("/api/updateParticipant", jsonParser, (req, res, next) => {
+    let updatedParticipation = {
+        participant: req.body.participant,
+        pool: req.body.pool,
+        coveredCost: req.body.coveredCost
+    }
+    ParticipantsList.put(updatedParticipation)
+        .then(participation => {
+            return res.status( 202 ).json( participation );
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : res.statusMessage
+            })
+        })
+});
+
 // DELETE Methods ----------------------------------------------------------------------------------------------------
 
 app.delete("/api/deletePool/:id", jsonParser, (req, res, next) => {

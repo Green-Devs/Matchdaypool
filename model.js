@@ -371,7 +371,7 @@ let ParticipantsList = {
             });
     },
     put: function (participation) {
-        return Participants.updateOne({_id: participation.id}, participation)
+        return Participants.updateOne({participant: participation.participant, pool: participation.pool}, participation)
             .then(participation => {
                 return participation;
             })
