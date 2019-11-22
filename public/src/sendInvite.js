@@ -1,4 +1,4 @@
-import { set } from "mongoose";
+// import { set } from "mongoose";
 
 $("#inviteBtn").on("click", (event) => {
     event.preventDefault();
@@ -8,21 +8,21 @@ $("#inviteBtn").on("click", (event) => {
         method: "GET",
         dataType: "JSON",
         success: function (users) {
-            for (let i = 0; i < users.length; i++) {
-                if (users[i].username == $('#invite').val()) {
-                    $('#invitesInThePool').append(`<option value='${users[i]._id}'>${$('#invite').val()}</option>`);
-                }
-            }
+            console.log(users)
+            console.log(users._id);
+            console.log($("#invite"));
+            console.log($('#invitesInThePool'));
+            $('#invitesInThePool').append(`<option value='${users._id}'>${$('#invite').val()}</option>`);
+            $('#invite').val('');
+                
         },
         error: function (err) {
             console.log("err", err);
+            $('#invite').val('');
         }
     };
 
-    $.ajax(settings);
-
-    $('#invite').val('');
-        
+    $.ajax(settings); 
 });
 $("#deleteBtn").on("click", (event) => {
     event.preventDefault();
@@ -35,7 +35,7 @@ $("#submitBtn").on("click", (event) => {
     let newInvites = [];
 
     let currentInvites = $('#invitesInThePool option');
-    for (let i = 0; i < currentTeams.length; i++) {
+    for (let i = 0; i < currentInvites.length; i++) {
         let inviteToAdd = { 
             invitee: currentInvites[i].value,
             pool: localStorage.getItem("poolID"),
@@ -52,6 +52,7 @@ $("#submitBtn").on("click", (event) => {
         contentType: "application/json", // type of sent data in the request
         success: function (responseJSON) {
             console.log(responseJSON);
+            window.location.href = './pool.html';
         },
         error: function (err) {
             console.log("err", err);
