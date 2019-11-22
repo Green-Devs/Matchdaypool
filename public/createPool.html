@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Matchday Pool - Create pool</title>
     <link rel="shortcut icon" type="image/png" href="https://i.imgur.com/U7a9HzK.png" />
-    <link href="./css/login.css" rel="stylesheet" type="text/css">
+    <link href="./css/createPool.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
@@ -29,7 +29,7 @@
         
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active" id="nav-item-home">
+                <li class="nav-item" id="nav-item-home">
                     <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item" id="nav-item-public-pools">
@@ -44,22 +44,45 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="loginForm">
+    <h2>Create a Pool</h2>
+    <div class="createForm">
         <form>
             <div class="form-group">
-                <label for="name"><b>Name</b></label>
+                <label for="name"><b>Name of the pool</b></label>
                 <input type="text" class="form-control" id="name" aria-describedby="emailHelp"
-                    placeholder="Name of pool">
+                    placeholder="Type in the name of the pool">
             </div>
             <div class="form-group">
                 <label for="desc"><b>Description</b></label>
                 <textarea type="text" class="form-control" id="desc" aria-describedby="emailHelp"
                     placeholder="Type in a description"></textarea>
             </div>
-            <div class="form-group">
+            <div class="form-row">
+            <div class="form-group col-md-6">
                 <label for="cost"><b>Cost</b></label>
-                <input type="text" class="form-control" id="cost" aria-describedby="emailHelp"
-                    placeholder="Username">
+                <input type="number" class="form-control" id="cost" aria-describedby="emailHelp"
+                    placeholder="$">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputState"><b>Sport</b></label>
+                <select id="inputState" class="form-control">
+                    <option selected>Choose...</option>
+                    <option>Baseball</option>
+                    <option>Basketball</option>
+                    <option>Cricket</option>
+                    <option>Esports</option>
+                    <option>Football</option>
+                    <option>Golf</option>
+                    <option>Handball</option>
+                    <option>Hockey</option>
+                    <option>MMA</option>
+                    <option>Motorsports</option>
+                    <option>Soccer</option>
+                    <option>Tennis</option>
+                    <option>Volleyball</option>
+                    <option>Other</option>
+                </select>
+            </div>
             </div>
             <div class="form-group">
                 <label for="private"><b>Private</b></label>
