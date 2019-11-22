@@ -83,6 +83,7 @@ function watchButtons() {
                                 contentType: "application/json", // type of sent data in the request
                                 success: function (createdMatchday) {
                                     console.log(createdMatchday);
+                                    window.location.href = './pool.html';
                                 },
                                 error: function (err) {
                                     console.log("err", err);
