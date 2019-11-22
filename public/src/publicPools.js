@@ -10,6 +10,7 @@ function fetchPublicPools() {
             console.log("success", responseJSON);
 
             for (let i = 0; i < responseJSON.length; i++) {
+
                 if (!responseJSON.private) {
                     let id = responseJSON[i].owner;
 

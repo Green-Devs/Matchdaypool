@@ -1,5 +1,6 @@
 document.querySelector("#nav-item-public-pools").classList.add("active");
 
+let pools = [];
 let owner;
 
 function getPools() {
@@ -16,16 +17,33 @@ function getPools() {
                     let id = responseJSON[i].owner;
                     
                     let getSettings = {
-                        url: "/api/getUsers/" + id,
+                        url: "/api/getUser/" + id,
                         method: "GET",
                         dataType: "JSON",
                         success: function(responseJSON) {
+                            console.log(responseJSON);
                             owner = responseJSON.name;
                         },
                         error: function(err){
                             console.log("err", err);
                         }
                     }
+
+                    fetch(getSetting.url)
+                        .then(function(response) {
+                            console.log(response);
+                            if (response.ok) {
+                                return response.json();
+                            }
+                            throw new Error("Something went wrong");
+                        })
+                        .then( function(responseJSON) {
+                            console.log(responseJSON);
+                            owner = responseJSON.name;
+                        })
+                        .catch(function(err) {
+                            console.log(err);
+                        });
 
                     $.ajax(getSettings);
 
