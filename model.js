@@ -206,7 +206,16 @@ let matchdaySchema = mongoose.Schema ({
 let Matchday = mongoose.model('Matchday', matchdaySchema);
 
 let MatchdayList = {
-    get: function(poolID) {
+    get: function() {
+        return Matchday.find()
+            .then(matchdays => {
+                return matchdays;
+            })
+            .catch(err => {
+                throw Error(err);
+            });
+    },
+    getByPool: function(poolID) {
         return Matchday.find({pool: poolID})
             .then(matchdays => {
                 return matchdays;
