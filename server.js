@@ -172,8 +172,8 @@ app.get("/api/getInvites/:userID", jsonParser, (req, res, next) => {
         });
 });
 
-app.get("/api/getPoolTeams", jsonParser, (req, res, next) => {
-    TeamList.getByPool(req.body.id)
+app.get("/api/getPoolTeams/:id", jsonParser, (req, res, next) => {
+    TeamList.getByPool(req.params.id)
         .then( teams => {
             return res.status ( 200 ).json( teams );
                 
@@ -426,8 +426,8 @@ app.post("/api/createMatch", jsonParser, (req, res, next) => {
     let newMatch = {
         teamOne: req.body.teamOne,
         teamTwo: req.body.teamTwo,
-        matchday: req.body.matchdayID,
-        pool: req.body.poolID
+        matchday: req.body.matchday,
+        pool: req.body.pool
     }
     MatchList.post(newMatch)
         .then(createdMatch => {
@@ -620,7 +620,7 @@ app.post("/api/updateVote", jsonParser, (req, res, next) => {
 
 // DELETE Methods ----------------------------------------------------------------------------------------------------
 
-app.delete("/api/deletePool", jsonParser, (req, res, next) => {
+app.delete("/api/deletePool/:id", jsonParser, (req, res, next) => {
     let erasedPool = {
         pool: {},
         matchdays: {},
@@ -628,21 +628,9 @@ app.delete("/api/deletePool", jsonParser, (req, res, next) => {
         teams: {}
     };
 
-    MatchdayList.get(req.body.id)
+    MatchdayList.deleteMany(req.params.id)
         .then(matchdays => {
-            for (let i = 0; i < matchdays.length; i++) {
-                MatchList.delete(matchdays[i]._id)
-                    .then(matches => {
-                        erasedPool.matches = matches;
-                    })
-                    .catch( error => {
-                        res.statusMessage = "Something went wrong with the DB. Try again later.";
-                        return res.status( 500 ).json({
-                            status : 500,
-                            message : res.statusMessage
-                        })
-                    });
-            }
+            erasedPool.matchdays = matchdays
         })
         .catch( error => {
             res.statusMessage = "Something went wrong with the DB. Try again later.";
@@ -651,9 +639,9 @@ app.delete("/api/deletePool", jsonParser, (req, res, next) => {
                 message : res.statusMessage
             })
         });
-    MatchdayList.deleteMany(req.body.id)
-        .then(matchdays => {
-            erasedPool.matchdays = matchdays;
+    MatchList.deleteByPool(req.params.id)
+        .then(matches => {
+            erasedPool.matches = matches;
         })
         .catch( error => {
             res.statusMessage = "Something went wrong with the DB. Try again later.";
@@ -662,7 +650,7 @@ app.delete("/api/deletePool", jsonParser, (req, res, next) => {
                 message : res.statusMessage
             })
         });
-    TeamList.delete(req.body.id)
+    TeamList.delete(req.params.id)
         .then(teams => {
             erasedPool.teams = teams;
         })
@@ -673,7 +661,7 @@ app.delete("/api/deletePool", jsonParser, (req, res, next) => {
                 message : res.statusMessage
             })
         });
-    PoolList.delete(req.body.id)
+    PoolList.delete(req.params.id)
         .then(pool => {
             erasedPool.pool = pool;
             return res.status( 202 ).json( erasedPool );
