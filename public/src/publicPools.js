@@ -24,7 +24,7 @@ function fetchPublicPools() {
                             <div class="card mb-3">
                                 <div class="card-body text-white bg-dark">
                                 <h5 class="card-title">${responseJSON[i].name}</h5>
-                                <p class="card-text miniText"><small>Sport: ${responseJSON[i].sport} Cost: $${responseJSON[i].cost}</small></p>
+                                <p class="card-text miniText"><small>Sport: ${responseJSON[i].sport} Cost: $${responseJSON[i].cost}</small></p><hr>
                                 <p class="card-text">${responseJSON[i].desc}</p>
                                 <p class="card-text"><small class="text-muted">Owner: ${owner}</small></p>
                                 </div>

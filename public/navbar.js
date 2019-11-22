@@ -16,7 +16,7 @@ function createNavBar() {
     if (checkIfLogged()) {
         $(".navbar-nav").append(`
             <li class="nav-item" id="nav-item-user-pools">
-                <a class="nav-link" href="publicPools.html">My Pools</a>
+                <a class="nav-link" href="myPools.html">My Pools</a>
             </li>
             <li class="nav-item" id="nav-item-create-pool">
                 <a class="nav-link" href="createPool.html">Create a pool</a>
