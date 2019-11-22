@@ -100,7 +100,7 @@ function watchButtons() {
             }
 
             $.ajax({
-                url: '/api/Users',
+                url: '/api/getUsers',
                 method: "GET",
                 dataType: "JSON",
                 success: function (users) {
