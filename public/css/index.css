@@ -1,6 +1,7 @@
 .mainSection {
     background-color: #13326E;
     height: 100%;
+    color: white;
 }
 
 html > body {
@@ -9,6 +10,17 @@ html > body {
 
 div > .signOut {
     color: crimson;
+}
+
+h1, p {
+    padding: 10px 30px;
+}
+
+h2 {
+    padding: 10px 30px;
+    color: #181A1D;
+    background-color: #2DD6AF;
+    width: 100%;
 }
 
 @media (min-width: 768px) {

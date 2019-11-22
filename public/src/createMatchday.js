@@ -94,7 +94,6 @@ function watchButtons() {
                         }
                     });
                 } 
-               // window.location.href = './pool.html';
             },
             error: function (err) {
                 console.log("err", err);
