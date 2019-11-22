@@ -51,17 +51,20 @@
                 <label for="name"><b>Name of the pool</b></label>
                 <input type="text" class="form-control" id="name" aria-describedby="emailHelp"
                     placeholder="Type in the name of the pool">
+                <label class="redMessages" id="redName"></label>
             </div>
             <div class="form-group">
                 <label for="desc"><b>Description</b></label>
                 <textarea type="text" class="form-control" id="desc" aria-describedby="emailHelp"
                     placeholder="Type in a description"></textarea>
+                    <label class="redMessages" id="redDesc"></label>
             </div>
             <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="cost"><b>Cost</b></label>
                 <input type="number" class="form-control" id="cost" aria-describedby="emailHelp"
                     placeholder="$">
+                <label class="redMessages" id="redCost"></label>
             </div>
             <div class="form-group col-md-6">
                 <label for="sport"><b>Sport</b></label>
@@ -82,6 +85,7 @@
                     <option>Volleyball</option>
                     <option>Other</option>
                 </select>
+                <label class="redMessages" id="redSport"></label>
             </div>
             </div>
             <div class="form-group">
@@ -90,6 +94,7 @@
                     placeholder="Type in the name of the team"></input>
             </div>
             <button type="submit" class="btn btn-success" id="teamBtn">Add team</button>
+            <label class="redMessages" id="redTeam"></label>
             <div class="form-group">
                 <label for="teamsInThePool"><b>Teams</b></label>
                 <select multiple class="form-control" id="teamsInThePool">
