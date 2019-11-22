@@ -1,3 +1,5 @@
+// import { lookup } from "dns";
+
 let firstMessage = false;
 let secondMessage = false;
 
@@ -43,7 +45,8 @@ function watchButtons() {
                 contentType: "application/json", // type of sent data in the request
                 success: function (loggedUser) {
                     console.log("success", loggedUser);
-                    localStorage.setItem("user", loggedUser);
+                    localStorage.setItem("user", loggedUser.username);
+                    localStorage.setItem("userID", loggedUser._id);
                     window.location.href = './index.html';
                 },
                 error: function (err) {

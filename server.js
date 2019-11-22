@@ -50,6 +50,7 @@ app.get("/api/getUserPools/:id", jsonParser, ( req, res, next ) => {
                 .then( participatingPools => {
 
                     userPools.participatingPools = participatingPools;
+                    console.log(userPools);
                     return res.status( 200 ).json( userPools );
                 })
                 .catch( error => {
@@ -315,7 +316,18 @@ app.post("/api/login", jsonParser, (req, res, next) => {
         })
         .then(match => {
             if (match) {
-                return res.status(200).json(req.body.username)
+                UserList.get(username)
+                    .then(user => {
+                        console.log(user);
+                        return res.status(200).json(user);
+                    })
+                    .catch(error => {
+                        res.statusMessage = 'Something went wrong with the db'
+                        return res.status(500).json({
+                            status: 500,
+                            message: 'Something went wrong with the db'
+                        })
+                    })
             } else {
                 res.statusMessage = `Passwords doesn't match`
                 return res.status(404).json({
@@ -453,6 +465,25 @@ app.post("/api/createVote", jsonParser, (req, res, next) => {
     MatchList.post(newVote)
         .then(createdVote => {
             return res.status( 202 ).json( createdVote );
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : res.statusMessage
+            })
+        })
+});
+
+app.post("/api/addParticipant", jsonParser, (req, res, next) => {
+    let newParticipation = {
+        participant: req.body.participant,
+        pool: req.body.pool,
+        coveredCost: req.body.coveredCost
+    }
+    ParticipantsList.post(newParticipation)
+        .then(participation => {
+            return res.status( 202 ).json( participation );
         })
         .catch(err => {
             res.statusMessage = "Something went wrong with the DB. Try again later.";
