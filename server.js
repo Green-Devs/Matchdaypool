@@ -539,14 +539,15 @@ app.put("/api/updateUser", jsonParser, (req, res, next) => {
         });
 });
 
-app.put("/api/updatePoolinfo", jsonParser, (req, res, next) => {
+app.put("/api/updatePoolInfo", jsonParser, (req, res, next) => {
     let updatedPool = {
         name: req.body.name,
         desc: req.body.desc,
         cost: req.body.cost,
         private: req.body.private,
         owner: req.body.owner,
-        sport: req.body.sport
+        sport: req.body.sport,
+        id: req.body.id
     }
 
     PoolList.update(updatedPool)

@@ -16,6 +16,10 @@ function checkIfOwner(ownerID) {
         success: function (poolOwner) {
             if (poolOwner.username == localStorage.getItem("user")) {
                 $(".topPart").append(`<button type="submit" class="btn btn-primary" id="editBtn">Edit Pool</button><button type="submit" class="btn btn-warning" id="sendBtn">Send invitations</button><button type="submit" class="btn btn-success" id="addBtn">Add a Matchday</button><button type="submit" class="btn btn-danger" id="deleteBtn">Delete Pool</button>`)
+                $("#editBtn").on("click", (event) => {
+                    event.preventDefault();
+                    window.location.href = './editPool.html';
+                });
             }
             else {
                 $(".topPart").remove();
