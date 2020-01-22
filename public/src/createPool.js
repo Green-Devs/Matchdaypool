@@ -82,16 +82,11 @@ function watchButtons() {
                 name: $("#name").val(),
                 desc: $("#desc").val(),
                 cost: $("#cost").val(),
-                private: "",
+                private: (!($('#private:checkbox:checked').length == 0)),
                 owner: "",
                 sport: $("#sport").val(),
                 teams: new Array()
             }
-
-            if ($('#private:checkbox:checked').length == 0)
-                newPool.private = false;
-            else
-                newPool.private = true;
 
             let currentTeams = $('#teamsInThePool option');
             for (let i = 0; i < currentTeams.length; i++) {

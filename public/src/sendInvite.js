@@ -1,5 +1,7 @@
 // import { set } from "mongoose";
 
+let poolParticipants;
+
 $("#inviteBtn").on("click", (event) => {
     event.preventDefault();
     
@@ -7,14 +9,16 @@ $("#inviteBtn").on("click", (event) => {
         url: '/api/findUser/' + $('#invite').val(),
         method: "GET",
         dataType: "JSON",
-        success: function (users) {
-            console.log(users)
-            console.log(users._id);
+        success: function (user) {
+            console.log(user)
+            console.log(user._id);
             console.log($("#invite"));
             console.log($('#invitesInThePool'));
-            $('#invitesInThePool').append(`<option value='${users._id}'>${$('#invite').val()}</option>`);
-            $('#invite').val('');
+            if (!checkParticipantIsInPool(user)) {
+                $('#invitesInThePool').append(`<option value='${user._id}'>${$('#invite').val()}</option>`);
                 
+            }
+            $('#invite').val('');
         },
         error: function (err) {
             console.log("err", err);
@@ -59,3 +63,32 @@ $("#submitBtn").on("click", (event) => {
         }
     });
 });
+
+function checkParticipantIsInPool(user) {
+    for (let i = 0; i < poolParticipants.length; i++) {
+        if (poolParticipants[i].participant == user._id) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function getParticipantsFromPool() {
+    let settings = {
+        url: `/api/getPoolParticipants/${localStorage.getItem("poolID")}`,
+        method: "GET",
+        dataType: "JSON",
+        success: function (responseJSON) {
+            console.log(responseJSON)
+            poolParticipants = responseJSON;
+        },
+        error: function (err) {
+            console.log("err", err);
+            $('#invite').val('');
+        }
+    };
+
+    $.ajax(settings); 
+}
+
+getParticipantsFromPool();
